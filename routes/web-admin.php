@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Blog\CategorysController as BlogCategorysControll
 use App\Http\Controllers\Admin\Vinograd\CommentsController;
 use App\Http\Controllers\Admin\Blog\CommentsController as BlogCommentsController;
 use App\Http\Controllers\Admin\Vinograd\DeliverysController;
+use App\Http\Controllers\Admin\Vinograd\IgnoresController;
 use App\Http\Controllers\Admin\Vinograd\MailsController;
 use App\Http\Controllers\Admin\Vinograd\ModificationsController;
 use App\Http\Controllers\Admin\Vinograd\Order\OrderPrintsController;
@@ -144,6 +145,15 @@ Route::middleware(['admin'])->group(callback: function () {
                 Route::get('/pages/toggle/{id}', 'toggle')->name('pages.toggle');
                 Route::get('/pages/up/{id}', 'moveUp')->name('pages.move.up');
                 Route::get('/pages/down/{id}', 'moveDown')->name('pages.move.down');
+            });
+
+            Route::controller(IgnoresController::class)->group(function () {
+                Route::get('/ignores','index')->name('ignores.index');
+                Route::get('/ignores/create','create')->name('ignores.create');
+                Route::post('/ignores', 'store')->name('ignores.store');
+                Route::get('/ignores/{page}/edit', 'edit')->name('ignores.edit');
+                Route::patch('/ignores/{page}', 'update')->name('ignores.update');
+                Route::get('/ignores/toggle/{id}', 'toggle')->name('ignores.toggle');
             });
 
             Route::group(['prefix' => 'orders', 'as' => 'orders.'], function() {

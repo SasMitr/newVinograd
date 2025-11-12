@@ -21,16 +21,20 @@
             <h2>Новые заказы <small>{!! $titleDate !!}</small></h2>
         @elseif (request('status') == 2)
             <h2>Оплаченные заказы <small>{!! $titleDate !!}</small></h2>
+        @elseif (request('status') == 3)
+            <h2>Отправленные заказы <small>{!! $titleDate !!}</small></h2>
         @elseif (request('status') == 8)
             <h2>Сформированные заказы <small>{!! $titleDate !!}</small></h2>
         @endif
         <div class="card">
             <div class="card-header">
-                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => '']))}}" class="btn btn-info btn-sm">Показать выполненные заказы</a>
-                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 1]))}}" class="btn btn-success btn-sm">Показать новые заказы</a>
-                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 2]))}}" class="btn btn-primary btn-sm">Показать оплаченные заказы</a>
-                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 7]))}}" class="btn btn-warning btn-sm">Показать предварительные заказы</a>
-                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 8]))}}" class="btn btn-default btn-sm">Показать сформированные заказы</a>
+                Показать заказы:
+                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => '']))}}" class="btn btn-info btn-sm">Выполненные</a>
+                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 1]))}}" class="btn btn-success btn-sm">Новые</a>
+                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 2]))}}" class="btn btn-primary btn-sm">Оплаченные</a>
+                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 3]))}}" class="btn btn-secondary btn-sm">Отправленные</a>
+                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 7]))}}" class="btn btn-warning btn-sm">Предварительные</a>
+                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 8]))}}" class="btn btn-default btn-sm">Сформированные</a>
 
                 @include('admin.vinograd.analytica._periodpicker', ['route' => 'dashboard.sorts'])
 
@@ -39,6 +43,34 @@
                 </div>
             </div>
             <div class="card-body table-responsive">
+
+                <div class="row mb-5">
+                    <div class="col-12 col-sm-4">
+                        <div class="info-box bg-light">
+                            <div class="info-box-content">
+                                <span class="info-box-text text-center text-muted">Колличество заказов</span>
+                                <span class="info-box-number text-center text-muted mb-0">{{$orderCount}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <div class="info-box bg-light">
+                            <div class="info-box-content">
+                                <span class="info-box-text text-center text-muted">Средний чек</span>
+                                <span class="info-box-number text-center text-muted mb-0">{{$orderAVG}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <div class="info-box bg-light">
+                            <div class="info-box-content">
+                                <span class="info-box-text text-center text-muted">Придумаю потом</span>
+                                <span class="info-box-number text-center text-muted mb-0"> ? <span>
+                    </span></span></div>
+                        </div>
+                    </div>
+                </div>
+
                 <table id="example1" class="table table-condensed">
                     <thead>
                     <tr>

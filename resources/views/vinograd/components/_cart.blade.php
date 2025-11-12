@@ -2,7 +2,6 @@
     <table class="table">
         <thead>
         <tr>
-
             <th class="plantmore-product-thumbnail"></th>
             <th class="cart-product-name">Наименование</th>
             <th class="plantmore-product-price">Цена за шт</th>
@@ -77,10 +76,7 @@
                 <li>Полная стоимость <span>{{currency($cost->getOrigin())}} {{signature()}}</span></li>
 
                 @foreach ($cost->getDiscounts() as $discount)
-                    <tr>
-                        <td class="text-right"><strong>{{$discount->getName()}}</strong></td>
-                        <td class="text-right">{{$discount->getValue()}}</td>
-                    </tr>
+                    <li>{{$discount->getName()}} <span>{{$discount->getValue()}} {{signature()}}</span></li>
                 @endforeach
 
                 <li>К оплате <span>{{currency($cost->getTotal())}} {{signature()}}</span></li>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Dashboard;
 
 use App\Models\Vinograd\Currency;
 use App\Models\Vinograd\Modification;
+use App\Models\Vinograd\Order\Order;
 use App\UseCases\Dashboard\DashboardService;
 use Illuminate\Http\Request;
 use View;
@@ -24,7 +25,9 @@ class DashboardController extends AppController
         return view('admin.vinograd.analytica.sorts_analytics', [
             'array' => $service->getCompletedOrdersItemsArray($dateRange, $status),
             'totalCost' => $service->getTotalCostCompletedOrders($dateRange, $status),
-            'titleDate' => $service->getTitleDate($dateRange)
+            'titleDate' => $service->getTitleDate($dateRange),
+            'orderCount' => Order::query()->whereStatus($status)->timeRange($dateRange, $status)->count(),
+            'orderAVG' => Order::query()->whereStatus($status)->timeRange($dateRange, $status)->avg('cost')
         ]);
     }
 

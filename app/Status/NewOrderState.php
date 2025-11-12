@@ -8,8 +8,8 @@ final class NewOrderState extends OrderState
 {
     protected $allowedStatuses = [
         Status::PAID,
-        Status::SENT,
-        Status::COMPLETED,
+//        Status::SENT,
+//        Status::COMPLETED,
         Status::CANCELLED,
         Status::CANCELLED_BY_CUSTOMER,
         Status::PRELIMINARY,

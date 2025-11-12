@@ -320,7 +320,7 @@
                             <option value="{{$key}}">{{$value}}</option>
                         @endforeach
                     </select>
-                    <div class="input-group-append">
+                    <div class="input-group-append input-badge">
                         <button class="btn btn-success">Изменить статус</button>
                     </div>
                 </div>
@@ -537,6 +537,7 @@ P.S.
 
         const print_url = '{{route('orders.print.ajax.print.order')}}';
         const build_url = '{{route('orders.ajax.build')}}';
+        const status_url = '{{route('orders.set_ajax_status')}}';
 
         window.addEventListener('DOMContentLoaded', function() {
 
@@ -554,6 +555,86 @@ P.S.
                     ? search + new URLSearchParams(data).toString()
                     : search;
             }
+
+            const postData = async (form, url = false) => {
+                url = url ? url : status_url;
+                let res = await fetch(url, {
+                    method: "POST",
+                    headers: {'X-Requested-With': 'XMLHttpRequest'},
+                    body: new FormData(form)
+                });
+                return await res.json();
+            };
+
+            const forms = document.querySelectorAll('form[data-name=status]');
+            forms.forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    if(!form.querySelector('[name="status"]').value) { return; }
+
+                    postData(form)
+                        .then(data => {
+                            if(data.success) {
+                                this.badge = e.target.querySelector('.input-badge');
+                                this.alert = document.querySelector('#Succes');
+
+                                if(data.success.code_form) {
+                                    this.alert.innerHTML = data.success.code_form;
+                                    $('#SuccesModal').modal('show');
+
+                                    let code_form = this.alert.querySelector('form');
+                                    code_form.addEventListener('submit', (e) => {
+                                        e.preventDefault();
+
+                                        postData(code_form, code_form.getAttribute("data-ajax-url"))
+                                            .then (data => {
+                                                if(data.success) {
+                                                    this.badge.innerHTML = data.success;
+                                                    this.alert.innerHTML = !data.info ? '<h4>Статус изменен.</h4>' : '<p>Статус изменен.</p>' + data.info;
+                                                    // setTimeout(function(){
+                                                    //     location.reload();
+                                                    // }, 1000);
+                                                } else if(data.errors){
+                                                    if (this.alert.querySelector(".errors") !== null) {
+                                                        this.alert.querySelector(".errors").innerHTML = get_list(data.errors);
+                                                    } else {
+                                                        const newEl = document.createElement("div");
+                                                        newEl.classList.add('alert', 'alert-danger', 'errors');
+                                                        newEl.innerHTML = get_list(data.errors);
+                                                        this.alert.querySelector(".card-header").replaceWith(newEl);
+                                                    }
+                                                }else{
+                                                    console.log(data);
+                                                    const newEl = document.createElement("div");
+                                                    newEl.classList.add('alert', 'alert-danger', 'errors');
+                                                    newEl.innerHTML = 'Неизвестная ошибка. Повторите попытку, пожалуйста!';
+                                                    this.alert.replaceWith(newEl);
+                                                }
+                                            }).catch((error) => {
+                                            console.log(error);
+                                        });
+                                    });
+                                } else {
+                                    this.badge.innerHTML = data.success.status;
+                                    toastr.success('Статус изменен.');
+                                    setTimeout(function(){
+                                        location.reload();
+                                    }, 1000);
+                                }
+                            }else if(data.errors){
+                                errors_list(data.errors);
+                            }else{
+                                console.log(data);
+                                errors_list('Неизвестная ошибка. Повторите попытку, пожалуйста!');
+                            }
+                        }).catch((error) => {
+                        console.log(error);
+                    });
+                });
+            });
+
+
+
 
             const print_button = document.querySelector(".print");
             print_button.addEventListener('click', (e) => {

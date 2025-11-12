@@ -145,5 +145,11 @@
                 </p>
             </a>
         </li>
+        <li class="nav-item has-treeview{{$deliverys_open ?? ''}}">
+            <a href="{{route('ignores.index')}}" class="nav-link{{$ignores_active ?? ''}}">
+                <i class="nav-icon fa fa-circle-thin"></i>
+                <p>Заблокированные</p>
+            </a>
+        </li>
     </ul>
 </nav>

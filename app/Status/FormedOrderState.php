@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 final class FormedOrderState extends OrderState
 {
     protected $allowedStatuses = [
-        Status::PAID,
+//        Status::PAID,
         Status::SENT,
         Status::COMPLETED,
         Status::CANCELLED,

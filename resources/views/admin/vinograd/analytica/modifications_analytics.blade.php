@@ -51,6 +51,27 @@
                     @endforeach
                     </tbody>
                 </table>
+
+
+                <table class="table table-bordered table-striped mt-5">
+                    <thead>
+                        <tr>
+                            <th>Модификация</th>
+                            <th>Колличество</th>
+                            <th>Сумма</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($total as $key => $value)
+                        <tr>
+                            <td>{{$key}}</td>
+                            <td>{{$value['quantity']}} шт</td>
+                            <td>{{$value['sum']}} руб.</td>
+                        </tr>
+
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
             <div class="card-footer text-right">
             </div>

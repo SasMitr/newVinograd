@@ -19,10 +19,19 @@ class ModificationsDashboardController extends AppController
         $dateRange = $service->getDateRange($request);
         $status = $request->status;
 
+        $modifications = $service->getDataOnModifications ($dateRange, $status);
+        $total = $modifications->groupBy('name')->map(function ($item) {
+            return [
+                'quantity' => $item->sum('allQuantity'),
+                'sum' =>$item->sum('cost')
+            ];
+        });
+
         return view('admin.vinograd.analytica.modifications_analytics', [
-            'modifications' => $service->getDataOnModifications ($dateRange, $status),
+            'modifications' => $modifications,
             'totalCost' => $service->getTotalCostCompletedOrders($dateRange, $status),
-            'titleDate' => $service->getTitleDate($dateRange)
+            'titleDate' => $service->getTitleDate($dateRange),
+            'total' => $total
         ]);
     }
 }

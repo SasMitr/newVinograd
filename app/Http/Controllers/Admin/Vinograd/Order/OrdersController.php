@@ -48,6 +48,7 @@ class OrdersController extends AppOrdersController
     {
         $order = Order::findOrFail($id);
         $items = OrderItem::getOrderSortedByItems($order);
+//        dd($items);
         $quantityByModifications = OrderItem::getQuantityByModifications($items);
 //
 //        $order->notify(new OrderCustomerMail());

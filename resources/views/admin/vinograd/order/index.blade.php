@@ -24,35 +24,35 @@
             <div class="card-body" style="display: none;">
                 <form action="?" method="GET">
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-4 col-md-2">
                             <div class="form-group">
                                 <label for="formGroupExampleInput">№ Заказа</label>
                                 <input type="text" class="form-control" id="formGroupExampleInput" name="id" autocomplete="off"
                                        value="{{ request('id') }}">
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-8 col-md-4">
                             <div class="form-group">
                                 <label for="inputGroupSelect1">Email</label>
-                                <input type="text" class="form-control" id="inputGroupSelect1" name="email"
+                                <input type="text" class="form-control" id="inputGroupSelect1" name="email" autocomplete="off"
                                        value="{{ request('email') }}">
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-8 col-md-4">
                             <div class="form-group">
                                 <label for="inputGroupSelect1">Телефон</label>
                                 <input type="text" class="form-control" id="inputGroupSelect1" name="phone" autocomplete="off"
                                        value="{{ request('phone') }}">
                             </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-4 col-md-2">
                             <div class="form-group">
                                 <label for="inputGroupSelect1">Дата</label>
                                 {!! Form::text('build', request('build'), ['class' => 'form-control float-right', 'id' => 'daterange',  'autocomplete'=> 'off']) !!}
                             </div>
-                            <div class="form-group float-right">
-                                <button type="submit" class="btn btn-primary">Найти</button>
-                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Найти</button>
                         </div>
                     </div>
                 </form>

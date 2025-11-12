@@ -14,7 +14,7 @@
         </div>
     </a>
     <div class="cart-dropdown" style="display: none;">
-        <ul>
+        <ul style="max-height: 400px; overflow: auto;">
             @foreach($cart->getItems() as $item)
                 @php
                     $product = $item->getProduct();

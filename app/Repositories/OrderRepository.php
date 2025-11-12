@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Vinograd\Order\Order;
 use App\Models\Vinograd\Order\Order as Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class OrderRepository extends CoreRepository
@@ -25,29 +26,30 @@ class OrderRepository extends CoreRepository
 
     public function getFilterOrders(Request $request, $status)
     {
-        $query = $this->modelName()->status($status);
-
-        if (!empty($request->get('id'))) {
-            $query->orWhere('id', $request->get('id'));
-        }
-        if (!empty($request->get('email'))) {
-            $query->orWhere('customer', 'like', '%' . $request->get('email') . '%');
-        }
-        if (!empty($request->get('phone'))) {
-            $query->orWhere('customer', 'like', '%' . preg_replace("/[^\d]/", '', $request->get('phone')) . '%');
-        }
-        if (!empty($request->get('build'))) {
-            $query->orWhere('date_build', $request->get('build'));
-        }
-
-        return $query
-            ->orderBy('current_status')
-            ->orderBy('id', 'desc')
-            ->paginate(30)
-            ->appends($request
-            ->all());
+        return Order::when($request->query(),
+            function (Builder $query) use ($request, $status) {
+                $query->
+                when($request->id, function (Builder $query) use ($request) {
+                    $query->orWhere('id', $request->id);
+                })->
+                when($request->email, function (Builder $query) use ($request) {
+                    $query->orWhere('customer', 'like', '%' . $request->email . '%');
+                })->
+                when($request->phone, function (Builder $query) use ($request) {
+                    $query->orWhere('customer', 'like', '%' . preg_replace("/[^\d]/", '', $request->phone) . '%');
+                })->
+                when($request->build, function (Builder $query) use ($request) {
+                    $query->orWhere('date_build', $request->build);
+                });
+            },
+            function (Builder $query) use ($status) {
+                $query->status($status);
+            })->
+        orderBy('current_status')->
+        orderBy('id', 'desc')->
+        paginate(30)->
+        appends($request->all());
     }
-
 
     //######################################
 

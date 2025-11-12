@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\cart\Cart;
+use App\cart\cost\calculator\DynamicCost;
 use App\cart\cost\calculator\SimpleCost;
 use App\cart\storage\SessionStorage;
 use App\Models\Blog\Category as BlogCategory;
@@ -39,7 +40,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Cart::class, function () {
-            return new Cart(new SessionStorage('cart'), new SimpleCost());
+            return new Cart(new SessionStorage('cart'), new DynamicCost(new SimpleCost()));
+//            return new Cart(new SessionStorage('cart'), new SimpleCost());
         });
     }
 

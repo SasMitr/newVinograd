@@ -4,7 +4,7 @@ namespace App\cart\cost\calculator;
 
 use App\cart\cost\Cost;
 use App\cart\cost\Discount as CartDiscount;
-//use shop\entities\Shop\Discount as DiscountEntity;
+use App\Models\Vinograd\Discount;
 
 class DynamicCost implements CalculatorInterface
 {
@@ -17,16 +17,14 @@ class DynamicCost implements CalculatorInterface
 
     public function getCost(array $items): Cost
     {
-        /** @var DiscountEntity[] $discounts */
-        $discounts = DiscountEntity::find()->active()->orderBy('sort')->all();
-
+        $discounts = Discount::active()->get();
         $cost = $this->next->getCost($items);
 
         foreach ($discounts as $discount) {
-            if ($discount->isEnabled()) {
+//            if ($discount->isEnabled()) {
                 $new = new CartDiscount($cost->getOrigin() * $discount->percent / 100, $discount->name);
                 $cost = $cost->withDiscount($new);
-            }
+//            }
         }
 
         return $cost;
