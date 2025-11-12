@@ -31,10 +31,4 @@ class Ignore extends Model
         $this->status = !$this->status;
         $this->save();
     }
-
-    public function toggledsStatus()
-    {
-        $this->status = !$this->status;
-        $this->save();
-    }
 }
