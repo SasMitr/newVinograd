@@ -31,4 +31,5 @@ class Ignore extends Model
         $this->status = !$this->status;
         $this->save();
     }
+
 }
