@@ -31,7 +31,7 @@
                         <td>{{$item->note}}</td>
                         <td>
                             <div class="btn-group" id="nav">
-                                @if($item->status)
+                                @if($item->is_blocked)
                                     <a class="btn btn-outline-warning btn-sm" href="{{route('ignores.toggle', ['id' => $item->id])}}" role="button"><i class="fa fa-lock"></i></a>
                                 @else
                                     <a class="btn btn-outline-success btn-sm" href="{{route('ignores.toggle', ['id' => $item->id])}} role="button"><i class="fa fa-thumbs-o-up"></i></a>

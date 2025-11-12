@@ -34,15 +34,16 @@
                 <div class="btn-group" id="nav">
                     @if(!$order->isCompleted())
                         @if($order->isPreliminsry())
-                        <a class="btn btn-primary btn-sm" href="{{route('orders.pre.edit', $order->id)}}" role="button">Редактировать</a>
+                        <a class="btn btn-outline-primary btn-sm" href="{{route('orders.pre.edit', $order->id)}}" role="button"><i class="fa fa-pencil"></i></a>
                         @else
-                        <a class="btn btn-primary btn-sm" href="{{route('orders.edit', $order->id)}}" role="button">Редактировать</a>
+                        <a class="btn btn-outline-primary btn-sm" href="{{route('orders.edit', $order->id)}}" role="button"><i class="fa fa-pencil"></i></a>
                         @endif
                     @endif
                     @if($order->isSent() && $order->isTrackCode())
-                        <a class="btn btn-info btn-sm" href="https://www.belpost.by/Otsleditotpravleniye?number={{$order->track_code}}" role="button" target="_blank">Отслеживание</a>
+                        <a class="btn btn-outline-info btn-sm" href="https://www.belpost.by/Otsleditotpravleniye?number={{$order->track_code}}" role="button" target="_blank"><i class="fa fa-truck"></i></a>
                     @endif
                         <a href="{{route('orders.repeat.create', $order->id)}}" class="btn btn-outline-success btn-sm" onclick="return confirm('Создать новый заказ для этого покупателя?!')"><i class="fa fa-plus"></i></a>
+                        <a href="{{route('ignores.blocked', $order->id)}}" class="btn btn-outline-warning btn-sm"><i class="fa fa-thumbs-o-down"></i></a>
                     {{Form::open(['route'=>['orders.destroy', $order->id], 'method'=>'delete'])}}
                     <button onclick="return confirm('Подтвердите удаление заказа!')" type="submit" class="btn btn-danger btn-sm">Удалить</button>
                     {{Form::close()}}

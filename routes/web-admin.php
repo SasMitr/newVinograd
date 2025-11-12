@@ -154,6 +154,7 @@ Route::middleware(['admin'])->group(callback: function () {
                 Route::get('/ignores/{page}/edit', 'edit')->name('ignores.edit');
                 Route::patch('/ignores/{page}', 'update')->name('ignores.update');
                 Route::get('/ignores/toggle/{id}', 'toggle')->name('ignores.toggle');
+                Route::get('/ignores/blocked/{id}', 'blocked')->name('ignores.blocked');
             });
 
             Route::group(['prefix' => 'orders', 'as' => 'orders.'], function() {

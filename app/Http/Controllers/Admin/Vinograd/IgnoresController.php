@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Vinograd;
 
 use App\Models\Vinograd\Ignore;
+use App\Models\Vinograd\Order\Order;
 use Illuminate\Http\Request;
 use View;
 
@@ -28,20 +29,7 @@ class IgnoresController extends AppController
 
     public function store(Request $request)
     {
-        $item = Ignore::add($request);
-
-//        $page->toggleStatus($request->get('status'));
-
-        try {
-//            new PostContentService($page);
-//            dispatch(new ContentProcessing($page));
-//
-//            dispatch(new SitemapVinograd());
-//            cache()->delete('siteMapHTML');
-
-        } catch (\Exception $e) {
-            return back()->withErrors([$e->getMessage()]);
-        }
+        Ignore::add($request);
         return redirect()->route('ignores.index');
     }
 
@@ -57,19 +45,18 @@ class IgnoresController extends AppController
         $item = Ignore::find($id);
 
         $item->edit($request);
-//        $page->toggleStatus($request->get('status'));
-
-//        try {
-////            new PostContentService($page);
-//////            dispatch(new ContentProcessing($page));
-////
-////            dispatch(new SitemapVinograd());
-////            cache()->delete('siteMapHTML');
-//
-//        } catch (\Exception $e) {
-//            return back()->withErrors([$e->getMessage()]);
-//        }
         return redirect()->route('ignores.index');
+    }
+
+    public function blocked($order_id)
+    {
+        $order = Order::find($order_id);
+
+        Ignore::updateOrInsert(
+            ['phone' => ignorPhone($order->customer['phone']), 'email' => $order->customer['email']],
+            ['date_at' => time()]
+        );
+        return redirect()->back();
     }
 
     public function toggle($id)

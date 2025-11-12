@@ -13,7 +13,9 @@ class Ignore extends Model
     public static function add($fields)
     {
         $ignor = new static;
-        $ignor->fill($fields->all());
+        $ignor->phone = ignorPhone($fields->phone);
+        $ignor->email = $fields->email;
+        $ignor->note = $fields->note;
         $ignor->date_at = time();
         $ignor->save();
 
@@ -22,13 +24,15 @@ class Ignore extends Model
 
     public function edit($fields)
     {
-        $this->fill($fields->all());
+        $this->phone = ignorPhone($fields->phone);
+        $this->email = $fields->email;
+        $this->note = $fields->note;
         $this->save();
     }
 
     public function toggleStatus()
     {
-        $this->status = !$this->status;
+        $this->is_blocked = !$this->is_blocked;
         $this->save();
     }
 

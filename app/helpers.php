@@ -178,6 +178,14 @@ if (! function_exists('formatPhone'))
     }
 }
 
+if (! function_exists('ignorPhone'))
+{
+    function ignorPhone($phone)
+    {
+        return substr($phone, -9);
+    }
+}
+
 if (! function_exists('formatNameBySimilar'))
 {
     //  Меняем:
