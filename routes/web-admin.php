@@ -151,8 +151,8 @@ Route::middleware(['admin'])->group(callback: function () {
                 Route::get('/ignores','index')->name('ignores.index');
                 Route::get('/ignores/create','create')->name('ignores.create');
                 Route::post('/ignores', 'store')->name('ignores.store');
-                Route::get('/ignores/{page}/edit', 'edit')->name('ignores.edit');
-                Route::patch('/ignores/{page}', 'update')->name('ignores.update');
+                Route::get('/ignores/{id}/edit', 'edit')->name('ignores.edit');
+                Route::patch('/ignores/{id}', 'update')->name('ignores.update');
                 Route::get('/ignores/toggle/{id}', 'toggle')->name('ignores.toggle');
                 Route::get('/ignores/blocked/{id}', 'blocked')->name('ignores.blocked');
             });

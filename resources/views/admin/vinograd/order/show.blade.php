@@ -43,7 +43,7 @@
                         <a class="btn btn-outline-info btn-sm" href="https://www.belpost.by/Otsleditotpravleniye?number={{$order->track_code}}" role="button" target="_blank"><i class="fa fa-truck"></i></a>
                     @endif
                         <a href="{{route('orders.repeat.create', $order->id)}}" class="btn btn-outline-success btn-sm" onclick="return confirm('Создать новый заказ для этого покупателя?!')"><i class="fa fa-plus"></i></a>
-                        <a href="{{route('ignores.blocked', $order->id)}}" class="btn btn-outline-warning btn-sm"><i class="fa fa-thumbs-o-down"></i></a>
+                        <a href="{{route('ignores.blocked', $order->id)}}" class="btn btn-outline-warning btn-sm" data-action="blocked"><i class="fa fa-thumbs-o-down"></i></a>
                     {{Form::open(['route'=>['orders.destroy', $order->id], 'method'=>'delete'])}}
                     <button onclick="return confirm('Подтвердите удаление заказа!')" type="submit" class="btn btn-danger btn-sm">Удалить</button>
                     {{Form::close()}}
@@ -539,11 +539,14 @@ P.S.
         const print_url = '{{route('orders.print.ajax.print.order')}}';
         const build_url = '{{route('orders.ajax.build')}}';
         const status_url = '{{route('orders.set_ajax_status')}}';
+        const blocked_url = '{{route('ignores.blocked', $order->id)}}';
+        const blocked_form = '{{route('ignores.create')}}';
+
 
         window.addEventListener('DOMContentLoaded', function() {
 
             const getData = async (data, url ) => {
-
+console.log(url + searchParams(data));
                 const res = await fetch(url + searchParams(data));
                 return await res.json();
             }
@@ -566,6 +569,31 @@ P.S.
                 });
                 return await res.json();
             };
+
+            const blocked = document.querySelector('a[data-action=blocked]');
+            blocked.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                this.alert = document.querySelector('#Succes');
+                // const textarea = document.createElement('textarea');
+                // textarea.setAttribute ( "cols" , " 50" );
+                // textarea.setAttribute ( "rows" , " 5" );
+                // textarea.setAttribute ( 'placeholder' , "Введите ваше сообщение здесь" );
+                // this.alert.appendChild(textarea);
+                // this.alert.innerHTML = textarea;
+
+                // $('#SuccesModal').modal('show');
+
+                getData('', blocked_url)
+                    .then(data => {
+                        this.alert.innerHTML = data.success;
+                        $('#SuccesModal').modal('show');
+                        console.log(data);
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                // console.log(123);
+            });
 
             const forms = document.querySelectorAll('form[data-name=status]');
             forms.forEach(form => {

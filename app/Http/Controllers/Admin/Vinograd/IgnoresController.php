@@ -48,15 +48,22 @@ class IgnoresController extends AppController
         return redirect()->route('ignores.index');
     }
 
-    public function blocked($order_id)
+    public function blocked(Request $request, $order_id)
     {
         $order = Order::find($order_id);
-
-        Ignore::updateOrInsert(
-            ['phone' => ignorPhone($order->customer['phone']), 'email' => $order->customer['email']],
-            ['date_at' => time()]
-        );
-        return redirect()->back();
+        $item = Ignore::query()->where('phone', ignorPhone($order->customer['phone']))->orWhere('email', $order->customer['email'])->first();
+        if ($item->exists()) {
+            return [
+                'success' => view('admin.vinograd.ignore.components._form', ['item' => $item])->render()
+            ];
+        } else {
+            return [ 'success' => ['ok-else']];
+        }
+//        Ignore::updateOrInsert(
+//            ['phone' => ignorPhone($order->customer['phone']), 'email' => $order->customer['email']],
+//            ['date_at' => time()]
+//        );
+//        return redirect()->back();
     }
 
     public function toggle($id)
