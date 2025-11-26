@@ -3,7 +3,6 @@
 /public/storage
 /public/pics
 /public/sitemap.xml
-/config/database.php
 /storage/*.key
 /vendor
 /.idea
