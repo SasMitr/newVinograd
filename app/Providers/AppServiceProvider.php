@@ -40,8 +40,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Cart::class, function () {
-            return new Cart(new SessionStorage('cart'), new DynamicCost(new SimpleCost()));
-//            return new Cart(new SessionStorage('cart'), new SimpleCost());
+//            return new Cart(new SessionStorage('cart'), new DynamicCost(new SimpleCost()));
+            return new Cart(new SessionStorage('cart'), new SimpleCost());
         });
     }
 
