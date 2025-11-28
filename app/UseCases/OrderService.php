@@ -4,6 +4,7 @@ namespace App\UseCases;
 
 use App\cart\Cart;
 use App\Mail\Admin\OrderAddMail;
+use App\Models\Vinograd\Ignore;
 use App\Models\Vinograd\Modification;
 use App\Models\Vinograd\Order\CustomerData;
 use App\Models\Vinograd\Order\DeliveryData;
@@ -114,6 +115,13 @@ class OrderService
             $this->orders->save($new_order);
             return $new_order->id;
         });
+    }
+
+    public function isIgnore($request)
+    {
+        if (Ignore::isIgnore($request->input('customer.email'), $request->input('customer.phone'))) {
+            abort(500);
+        }
     }
 
     private function newDeliveryData($request)

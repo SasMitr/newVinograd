@@ -40,6 +40,7 @@ class CheckoutController extends Controller
     public function checkout(CheckoutRequest $request)
     {
         try {
+            $this->service->isIgnore($request);
             $order = $this->service->checkout($request);
             $this->service->sendMail($order);
 
