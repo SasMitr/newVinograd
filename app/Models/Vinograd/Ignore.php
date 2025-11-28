@@ -36,4 +36,8 @@ class Ignore extends Model
         $this->save();
     }
 
+    public static function isIgnore($email, $phone)
+    {
+        return self::query()->where('email', $email)->orWhere('phone', $phone)->exists();
+    }
 }
