@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Admin\Vinograd;
 
+use App\Http\Controllers\Controller;
 use App\Models\Vinograd\Ignore;
 use App\Models\Vinograd\Order\Order;
 use Illuminate\Http\Request;
 use View;
 
-class IgnoresController extends AppController
+class IgnoresController extends Controller
 {
     public function __construct()
     {
-        parent::__construct();
         View::share ('ignores_active', ' active');
+        View::share ('ignores_open', ' menu-open');
     }
 
     public function index()
