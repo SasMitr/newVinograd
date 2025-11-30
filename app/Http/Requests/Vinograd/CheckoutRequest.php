@@ -19,7 +19,7 @@ class CheckoutRequest extends FormRequest
             'delivery.index' => 'sometimes|regex:/^[0-9]{6}$/',
             'delivery.slug' => 'exists:vinograd_delivery_methods,slug',
             'customer.name' => 'required|min:3|max:50|string',
-            'customer.phone' => 'required_if:delivery.slug,boxberry|nullable|required_without:customer.email',
+            'customer.phone' => 'required_if:delivery.slug,boxberry|nullable|required_without:customer.email|min:9|max:15',
             'customer.email' => 'nullable|required_without:customer.phone|email',
             'note' => 'nullable|string',
         ];
@@ -32,6 +32,8 @@ class CheckoutRequest extends FormRequest
             'customer.email.required_without' => 'Оставьте для обратной связи либо Email либо номер телефона.',
             'customer.phone.required_without' => 'Оставьте для обратной связи либо Email либо номер телефона.',
             'customer.phone.required_if' => 'Оставьте номер своего мобильного телефона. На него придет сообщение о доставке посылки.',
+            'customer.phone.min' => 'Оставьте корректный номер телефона.',
+            'customer.phone.max' => 'Оставьте корректный номер телефона.',
             'delivery.index.regex'  => 'Введите индекс почты правильного формата.',
             'delivery.address.string'  => 'Укажите действительный адрес отправки заказа.',
             'delivery.slug.exists'  => 'Что-то пошло не так, попробуйте снова.',
