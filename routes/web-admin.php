@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Blog\CategorysController as BlogCategorysControll
 use App\Http\Controllers\Admin\Vinograd\CommentsController;
 use App\Http\Controllers\Admin\Blog\CommentsController as BlogCommentsController;
 use App\Http\Controllers\Admin\Vinograd\DeliverysController;
+use App\Http\Controllers\Admin\Vinograd\Exel\UpdateCatalogController;
 use App\Http\Controllers\Admin\Vinograd\IgnoresController;
 use App\Http\Controllers\Admin\Vinograd\MailsController;
 use App\Http\Controllers\Admin\Vinograd\ModificationsController;
@@ -155,6 +156,10 @@ Route::middleware(['admin'])->group(callback: function () {
                 Route::patch('/ignores/{id}', 'update')->name('ignores.update');
                 Route::get('/ignores/toggle/{id}', 'toggle')->name('ignores.toggle');
                 Route::get('/ignores/blocked/{id}', 'blocked')->name('ignores.blocked');
+            });
+
+            Route::controller(UpdateCatalogController::class)->group(function () {
+                Route::get('/exel','index')->name('exel.index');
             });
 
             Route::group(['prefix' => 'orders', 'as' => 'orders.'], function() {
