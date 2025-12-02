@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
+use App\Exports\CatalogExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UpdateCatalogController extends Controller
 {
@@ -28,7 +30,6 @@ class UpdateCatalogController extends Controller
 
     public function export()
     {
-        Storage::download('exel/catalog.xlsx', 'Обновление каталога');
-        return redirect()->back()->with('status', 'Файл скачался');
+	return Excel::download(new CatalogExport, 'catalog.xlsx');
     }
 }
