@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use App\Exports\CatalogExport;
+use App\Imports\CatalogImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UpdateCatalogController extends Controller
@@ -24,12 +25,13 @@ class UpdateCatalogController extends Controller
 
     public function import(Request $request)
     {
-        Storage::putFileAs('exel', $request->file('file'), 'catalog.xlsx');
+	Excel::import(new CatalogImport, request()->file('file'));
+        //Storage::putFileAs('exel', $request->file('file'), 'catalog.xlsx');
         return redirect()->back()->with('status', 'Файл загружен, обработка начата');
     }
 
     public function export()
     {
-	return Excel::download(new CatalogExport, 'catalog.xlsx');
+	    return Excel::download(new CatalogExport, 'catalog.xlsx');
     }
 }
