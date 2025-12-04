@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Admin\Vinograd\Exel;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\Admin\Vinograd\Excel\CatalogImportRequest;
 use Illuminate\Support\Facades\View;
 use App\Exports\CatalogExport;
 use App\Imports\CatalogImport;
@@ -23,15 +22,16 @@ class UpdateCatalogController extends Controller
         return view('admin.vinograd.exel.index');
     }
 
-    public function import(Request $request)
+    public function import(CatalogImportRequest $request)
     {
-	Excel::import(new CatalogImport, request()->file('file'));
+	    Excel::import(new CatalogImport, $request->file('file'));
         //Storage::putFileAs('exel', $request->file('file'), 'catalog.xlsx');
         return redirect()->back()->with('status', 'Файл загружен, обработка начата');
     }
 
-    public function export()
+    public function export($modification_id)
     {
-	    return Excel::download(new CatalogExport, 'catalog.xlsx');
+        $modification_name = $modification_id == 1 ? 'cherenki' : 'sagenzi';
+	    return Excel::download(new CatalogExport ($modification_id), 'catalog_' . $modification_name . '.xlsx');
     }
 }

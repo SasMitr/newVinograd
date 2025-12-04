@@ -9,7 +9,7 @@ class Modification extends Model
 {
     protected $table = 'vinograd_product_modifications';
     public $timestamps = false;
-    protected $fillable = ['product_id', 'modification_id', 'price', 'quantity'];
+    protected $fillable = ['product_id', 'modification_id', 'price', 'quantity', 'in_stock'];
 
     protected $casts = [
         'price' => PriceCast::class
