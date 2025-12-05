@@ -159,9 +159,9 @@ Route::middleware(['admin'])->group(callback: function () {
             });
 
             Route::controller(UpdateCatalogController::class)->group(function () {
-                Route::get('/exel','index')->name('exel.index');
-                Route::post('/exel', 'import')->name('exel.import');
-		        Route::get('/exel/export/{modification_id}','export')->name('exel.export');
+                Route::get('/excel','index')->name('excel.index');
+                Route::post('/excel', 'import')->name('excel.import');
+		        Route::get('/excel/export/{modification_id}','export')->name('excel.export');
             });
 
             Route::group(['prefix' => 'orders', 'as' => 'orders.'], function() {

@@ -13,19 +13,19 @@ class UpdateCatalogController extends Controller
 {
     public function __construct()
     {
-        View::share ('exel_active', ' active');
-        View::share ('exel_open', ' menu-open');
+        View::share ('excel_active', ' active');
+        View::share ('excel_open', ' menu-open');
     }
 
     public function index()
     {
-        return view('admin.vinograd.exel.index');
+        return view('admin.vinograd.excel.index');
     }
 
     public function import(CatalogImportRequest $request)
     {
 	    Excel::import(new CatalogImport, $request->file('file'));
-        //Storage::putFileAs('exel', $request->file('file'), 'catalog.xlsx');
+        //Storage::putFileAs('excel', $request->file('file'), 'catalog.xlsx');
         return redirect()->back()->with('status', 'Файл загружен, обработка начата');
     }
 

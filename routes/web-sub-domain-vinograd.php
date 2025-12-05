@@ -157,10 +157,11 @@ Route::group(['prefix'=>'blog', 'as' => 'blog.'], function() {
 //    });
 
 Route::get('/clear', function() {
-    //Artisan::call('cache:clear');
     Artisan::call('config:cache');
-    Artisan::call('view:clear');
-    Artisan::call('route:clear');
+    //Artisan::call('cache:clear');
+//    Artisan::call('config:cache');
+//    Artisan::call('view:clear');
+//    Artisan::call('route:clear');
     return "Кэш очищен.";
 });
 

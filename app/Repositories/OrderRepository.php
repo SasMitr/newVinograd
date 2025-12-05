@@ -55,7 +55,8 @@ class OrderRepository extends CoreRepository
 
     public function get($id): Order
     {
-        if (!$order = Order::with('items')->find($id)) {
+        $order = Order::with('items')->find($id);
+        if (!$order) {
             throw new \RuntimeException('Order is not found.');
         }
         return $order;

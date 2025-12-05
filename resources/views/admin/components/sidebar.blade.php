@@ -151,8 +151,8 @@
                 <p>Заблокированные</p>
             </a>
         </li>
-        <li class="nav-item has-treeview{{$exel_open ?? ''}}">
-            <a href="{{route('exel.index')}}" class="nav-link{{$exel_active ?? ''}}">
+        <li class="nav-item has-treeview{{$excel_open ?? ''}}">
+            <a href="{{route('excel.index')}}" class="nav-link{{$excel_active ?? ''}}">
                 <i class="nav-icon fa fa-circle-thin"></i>
                 <p>Обновление каталога</p>
             </a>
