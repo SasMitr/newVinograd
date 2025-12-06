@@ -50,12 +50,12 @@ class OrderService
         $this->correspondence = $correspondence;
     }
 
-    public function createNewOrder($status = Status::NEW)
+    public function createNewOrder($customer, $status = Status::NEW)
     {
         $order = Order::create(
             Auth::id(),
             new DeliveryData(),
-            new CustomerData(),
+            $customer,
             0,
             null,
             $status
@@ -359,7 +359,7 @@ class OrderService
                 $query->where('customer', 'like', '%' . $order->customer['email'] . '%');
             }
             if ($order->customer['phone']) {
-                $query->orWhere('customer', 'like', '%' . preg_replace("/[^\d]/", '', $order->customer['phone']) . '%');
+                $query->orWhere('customer', 'like', '%' . preg_replace("/[^\d]/", '', ignorPhone($order->customer['phone'])) . '%');
             }
         });
         $orders = $query->orderBy('id', 'desc')->get();
@@ -456,3 +456,4 @@ class OrderService
             });
     }
 }
+

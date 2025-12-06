@@ -76,8 +76,8 @@
                     </div>
                     <div class="col-3">
                         <h4>Создать заказ:</h4>
-                        <a href="{{route('orders.create')}}" class="btn btn-success btn-sm">Новый</a>
-                        <a href="{{route('orders.pre.create')}}" class="btn btn-warning btn-sm">Предварительный</a>
+                        <a href="{{route('orders.create')}}" class="btn btn-success btn-sm" data-create_order="new">Новый</a>
+                        <a href="{{route('orders.pre.create')}}" class="btn btn-warning btn-sm" data-create_order="pre_new">Предварительный</a>
                     </div>
                 </div>
 
@@ -246,6 +246,55 @@ window.addEventListener('DOMContentLoaded', function() {
         });
         return await res.json();
     };
+
+    // data-create_order
+    const newOrder = document.querySelector('a[data-create_order="new"]')
+    newOrder.addEventListener('click', (e) => {
+        e.preventDefault();
+        let url = newOrder.getAttribute('href');
+
+        getData('', url)
+            .then(data => {
+                if (data.success) {
+                    this.alert = document.querySelector('#Succes');
+                    this.alert.innerHTML = data.success;
+                    $('#SuccesModal').modal('show');
+
+                    let code_form = this.alert.querySelector('form');
+                    code_form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+
+                        postData(code_form, code_form.getAttribute('action'))
+                            .then (data => {
+                                if(data.success) {
+                                    window.location = data.success;
+                                } else if(data.errors){
+                                    if (this.alert.querySelector(".errors") !== null) {
+                                        this.alert.querySelector(".errors").innerHTML = get_list(data.errors);
+                                    } else {
+                                        const newEl = document.createElement("div");
+                                        newEl.classList.add('alert', 'alert-danger', 'errors');
+                                        newEl.innerHTML = get_list(data.errors);
+                                        this.alert.querySelector(".card-header").replaceWith(newEl);
+                                    }
+                                }else{
+                                    const newEl = document.createElement("div");
+                                    newEl.classList.add('alert', 'alert-danger', 'errors');
+                                    newEl.innerHTML = 'Неизвестная ошибка. Повторите попытку, пожалуйста!';
+                                    this.alert.replaceWith(newEl);
+                                }
+                            })
+                            .catch((error) => {
+                            console.log(error);
+                        });
+                    });
+                }
+
+            })
+            .catch((xhr) => {
+                console.log(xhr);
+            });
+    });
 
     const forms = document.querySelectorAll('form[data-name=status]');
     forms.forEach(form => {

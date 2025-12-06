@@ -2,6 +2,7 @@
 
 namespace App\Models\Vinograd;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Ignore extends Model
@@ -38,6 +39,14 @@ class Ignore extends Model
 
     public static function isIgnore($email, $phone)
     {
-        return self::query()->where('email', $email)->orWhere('phone', $phone)->exists();
+        return self::query()
+            ->when($email, function (Builder $query, string $email) {
+                $query->orWhere('email', $email);
+            })
+            ->when($phone, function (Builder $query, int $phone) {
+                $query->orWhere('phone', $phone);
+            })
+            ->exists();
+        //return self::query()->where('email', $email)->orWhere('phone', $phone)->exists();
     }
 }

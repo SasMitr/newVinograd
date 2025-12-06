@@ -38,7 +38,7 @@ class CatalogImport implements ToCollection, WithHeadingRow, WithValidation, Ski
         $map = [];
         foreach ($failures as $failure) {
             foreach ($failure->errors() as $error) {
-                $map[] = 'Ошибка в строке-' . $failure->row() . ': ' .$error;
+                $map[] = 'Ошибка в строке-' . $failure->row() . ': ' . $error;
             }
         }
 
