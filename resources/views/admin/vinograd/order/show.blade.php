@@ -51,7 +51,7 @@
                            onclick="return confirm('Создать новый заказ для этого покупателя?!')"><i
                                 class="fa fa-plus"></i></a>
 
-                        <a href="{{route('ignores.blocked.form', $order->id)}}" class="btn {{$order->is_blocked() ? 'btn-outline-warning' : 'btn-outline-danger'}}btn-outline-warning btn-sm"
+                        <a href="{{route('ignores.blocked.form', $order->id)}}" class="btn {{$order->is_blocked() ? 'btn-outline-danger' : 'btn-outline-warning'}} btn-sm"
                            data-action="blocked"><i class="fa fa-thumbs-o-down"></i></a>
 
                         {{Form::open(['route'=>['orders.destroy', $order->id], 'method'=>'delete'])}}

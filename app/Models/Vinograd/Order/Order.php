@@ -3,6 +3,7 @@
 namespace App\Models\Vinograd\Order;
 
 use App\Models\Vinograd\DeliveryMethod;
+use App\Models\Vinograd\Ignore;
 use App\Models\Vinograd\QueryBuilder\OrderQueryBuilder;
 use App\Models\Vinograd\User;
 use App\Status\Status;
@@ -313,5 +314,10 @@ class Order extends Model
             return getRusDate($value);
         }
         return '---';
+    }
+
+    public function is_blocked()
+    {
+        return Ignore::isIgnore($this->customer['email'], $this->customer['phone'])->blocked()->exists();
     }
 }

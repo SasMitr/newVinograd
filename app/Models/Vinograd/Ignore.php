@@ -53,8 +53,4 @@ class Ignore extends Model
                 $query->orWhere('phone', ignorPhone($phone));
             });
     }
-    public function is_blocked()
-    {
-        return self::isIgnore($this->email, $this->phone)->blocked()->exsist();
-    }
 }
