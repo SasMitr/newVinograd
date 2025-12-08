@@ -23,11 +23,12 @@ class Ignore extends Model
         return $ignor;
     }
 
-    public function edit($fields)
+    public function edit($fields, $blocked = false)
     {
-        $this->phone = ignorPhone($fields->phone);
-        $this->email = $fields->email;
-        $this->note = $fields->note;
+        $this->phone = ignorPhone($fields->phone) ?: $this->phone;
+        $this->email = $fields->email ?: $this->email;
+        $this->note = $fields->note ?: $this->note;
+        $this->is_blocked = !$blocked ? $this->is_blocked : 1;
         $this->save();
     }
 
@@ -37,16 +38,23 @@ class Ignore extends Model
         $this->save();
     }
 
+    public function scopeBlocked (Builder $query): Builder
+    {
+        return $query->where('is_blocked', 1);
+    }
+
     public static function isIgnore($email, $phone)
     {
         return self::query()
             ->when($email, function (Builder $query, string $email) {
                 $query->orWhere('email', $email);
             })
-            ->when($phone, function (Builder $query, int $phone) {
-                $query->orWhere('phone', $phone);
-            })
-            ->exists();
-        //return self::query()->where('email', $email)->orWhere('phone', $phone)->exists();
+            ->when($phone, function (Builder $query, string $phone) {
+                $query->orWhere('phone', ignorPhone($phone));
+            });
+    }
+    public function is_blocked()
+    {
+        return self::isIgnore($this->email, $this->phone)->blocked()->exsist();
     }
 }

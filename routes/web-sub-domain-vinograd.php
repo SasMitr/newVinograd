@@ -107,6 +107,7 @@ Route::group(['as' => 'vinograd.'], function() {
         Route::controller(CheckoutController::class)->group(function () {
             Route::get('/delivery', 'delivery')->name('delivery');
             Route::get('/delivery/{delivery_slug}', 'deliveryForm')->name('deliveryForm');
+            Route::get('/order-confirmation/{delivery_slug}', 'orderConfirmation')->name('order.confirmation');
             Route::post('/checkout', 'checkout')->name('checkout');
         });
     });
@@ -157,11 +158,10 @@ Route::group(['prefix'=>'blog', 'as' => 'blog.'], function() {
 //    });
 
 Route::get('/clear', function() {
-    Artisan::call('config:cache');
     //Artisan::call('cache:clear');
-//    Artisan::call('config:cache');
-//    Artisan::call('view:clear');
-//    Artisan::call('route:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
     return "Кэш очищен.";
 });
 

@@ -155,7 +155,8 @@ Route::middleware(['admin'])->group(callback: function () {
                 Route::get('/ignores/{id}/edit', 'edit')->name('ignores.edit');
                 Route::patch('/ignores/{id}', 'update')->name('ignores.update');
                 Route::get('/ignores/toggle/{id}', 'toggle')->name('ignores.toggle');
-                Route::get('/ignores/blocked/{id}', 'blocked')->name('ignores.blocked');
+                Route::get('/ignores/blocked/{id}', 'blockedForm')->name('ignores.blocked.form');
+                Route::post('/ignores/blocked/store', 'blockedStore')->name('ignores.blocked.store');
             });
 
             Route::controller(UpdateCatalogController::class)->group(function () {

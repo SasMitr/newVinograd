@@ -49,7 +49,7 @@ class OrdersController extends AppOrdersController
 
     public function store(CustomerRequest $request, OrderService $service){
 
-        if (Ignore::isIgnore($request->input('customer.email'), ignorPhone($request->input('customer.phone')))) {
+        if (Ignore::isIgnore($request->input('customer.email'), ignorPhone($request->input('customer.phone')))->blocked()->exists()) {
             throw ValidationException::withMessages(['ВНИМАНИЕ! Заказчик заблокирован']);
         }
         $customer = new CustomerData(

@@ -11,15 +11,26 @@ class CheckoutRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'customer' => array_merge(
+                $this->customer,
+                [
+                    'phone' => preg_replace("/[^\d]/", '', $this->input('customer.phone'))
+                ]
+            ),
+        ]);
+    }
+
     public function rules()
     {
-//        dd($this->delivery);
         return [
             'delivery.address' => 'sometimes|string',
             'delivery.index' => 'sometimes|regex:/^[0-9]{6}$/',
             'delivery.slug' => 'exists:vinograd_delivery_methods,slug',
             'customer.name' => 'required|min:3|max:50|string',
-            'customer.phone' => 'required_if:delivery.slug,boxberry|nullable|required_without:customer.email|min:9|max:15',
+            'customer.phone' => 'required_if:delivery.slug,yandex|nullable|required_without:customer.email|min:9|max:15',
             'customer.email' => 'nullable|required_without:customer.phone|email',
             'note' => 'nullable|string',
         ];

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Vinograd;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Vinograd\Order\CustomerBlockedRequest;
 use App\Models\Vinograd\Ignore;
 use App\Models\Vinograd\Order\Order;
 use Illuminate\Http\Request;
@@ -28,9 +29,11 @@ class IgnoresController extends Controller
         return view('admin.vinograd.ignore.create');
     }
 
-    public function store(Request $request)
+    public function store(CustomerBlockedRequest $request)
     {
-        Ignore::add($request);
+        $item = Ignore::isIgnore($request->email, $request->phone)->first();
+        !$item ? Ignore::add($request) : $item->edit($request);
+
         return redirect()->route('ignores.index');
     }
 
@@ -49,22 +52,32 @@ class IgnoresController extends Controller
         return redirect()->route('ignores.index');
     }
 
-    public function blocked(Request $request, $order_id)
+    public function blockedForm($order_id)
     {
         $order = Order::find($order_id);
-        $item = Ignore::query()->where('phone', ignorPhone($order->customer['phone']))->orWhere('email', $order->customer['email'])->first();
-        if ($item->exists()) {
+        $item = Ignore::isIgnore($order->customer['email'], $order->customer['phone'])->first();
             return [
-                'success' => view('admin.vinograd.ignore.components._form', ['item' => $item])->render()
+                'success' => view('admin.vinograd.ignore.components._form', [
+                    'phone' => $item ? $item->phone : $order->customer['phone'],
+                    'email' => $item ? $item->email : $order->customer['email'],
+                    'note' => $item ? $item->note : '',
+                    'ignor_id' => $item ? $item->id : ''
+                ])->render()
             ];
+    }
+
+    public function blockedStore(CustomerBlockedRequest $request)
+    {
+        if (!$request->ignor_id) {
+            Ignore::add($request);
         } else {
-            return [ 'success' => ['ok-else']];
+            $item = Ignore::find($request->ignor_id);
+            $item->edit($request, true);
         }
-//        Ignore::updateOrInsert(
-//            ['phone' => ignorPhone($order->customer['phone']), 'email' => $order->customer['email']],
-//            ['date_at' => time()]
-//        );
-//        return redirect()->back();
+
+         return [
+             'success' => 'работает'
+         ];
     }
 
     public function toggle($id)

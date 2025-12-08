@@ -9,7 +9,7 @@ class CustomerData
 
     public function __construct($phone = '', $name = '', $email = '')
     {
-        $this->phone = preg_replace("/[^\d]/", '', $phone);
+        $this->phone = $phone;
         $this->name = $name;
         $this->email = $email;
     }

@@ -119,7 +119,7 @@ class OrderService
 
     public function isIgnore($request)
     {
-        if (Ignore::isIgnore($request->input('customer.email'), $request->input('customer.phone'))) {
+        if (Ignore::isIgnore($request->input('customer.email'), ignorPhone($request->input('customer.phone')))->blocked()->exists()) {
             abort(500);
         }
     }

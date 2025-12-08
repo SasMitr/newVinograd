@@ -25,12 +25,19 @@ class CheckoutController extends Controller
     public function delivery()
     {
         return view('vinograd.checkout.delivery', [
-                'deliverys' => DeliveryMethod::active()->filterCost($this->cartService->getCart()->getCost()->getTotal())->orderBy('sort')->get(),
+                'deliverys' => DeliveryMethod::select('name', 'slug')->active()->filterCost($this->cartService->getCart()->getCost()->getTotal())->orderBy('sort')->get(),
                 'cart' => $this->cartService->getCart()
             ]);
     }
 
     public function deliveryForm($delivery_slug)
+    {
+        return view('vinograd.checkout.order-confirmation', [
+            'delivery' => DeliveryMethod::where('slug', $delivery_slug)->first()
+        ]);
+    }
+
+    public function orderConfirmation($delivery_slug)
     {
         return view('vinograd.checkout.checkoutForm', [
             'delivery' => DeliveryMethod::where('slug', $delivery_slug)->first()
@@ -46,8 +53,8 @@ class CheckoutController extends Controller
 
             return redirect()->
                    route((Auth::user()) ? 'vinograd.cabinet.home' : 'vinograd.category')->
-                   with('status', 'Заказ сохранен. № заказа: ' . $order->id . '. В ближайшее время мы с Вами свяжемся для уточнения деталей!')->
-                   withErrors(['<h4>ВНИМАНИЕ! Если от нас в ближайшее время не поступит обратная связь, посмотрите письма в папке СПАМ</h4>']);
+                   with('status', 'Заказ сохранен. № заказа: ' . $order->id . '. Саженцы будут готовы на конец октября - начало ноября, черенки на конец ноября начало декабря. Как только все будет готово, мы с Вами свяжемся для уточнения деталей!')->
+                   withErrors(['<h4>ВНИМАНИЕ! Если от нас не поступает обратная связь, посмотрите письма в папке СПАМ</h4>']);
 
         } catch (\DomainException $e) {
             return redirect()->route('vinograd.cart.ingex')->withErrors([$e->getMessage()]);

@@ -162,6 +162,10 @@
                             </tfoot>
                         </table>
                     </div>
+{{--                    <div class="order-button-payment">--}}
+{{--                        <input type="hidden" name="delivery[slug]" value="{{ $delivery->slug }}">--}}
+{{--                        <input value="Заказать" type="submit">--}}
+{{--                    </div>--}}
                 </div>
             </div>
 
