@@ -14,6 +14,7 @@ use App\Models\Vinograd\Order\OrderItem;
 use App\Notifications\OrderCustomerMail;
 use App\Repositories\OrderRepository;
 use App\Repositories\ProductRepository;
+use App\Status\Status;
 use App\UseCases\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -57,10 +58,12 @@ class OrdersController extends AppOrdersController
             $request->input('customer.name'),
             $request->input('customer.email')
         );
-        if (!$order = $service->createNewOrder($customer)) {
+        $status = $request->input('pre_order') ? Status::PRELIMINARY : Status::NEW;
+        if (!$order = $service->createNewOrder($customer, $status)) {
             throw ValidationException::withMessages(['Ошибка создания заказа']);
         }
-        return ['success' => route('orders.edit', $order->id)];
+        $routeName = $request->input('pre_order') ? 'orders.pre.edit' : 'orders.edit';
+        return ['success' => route($routeName, $order->id)];
     }
 
     public function show($id)

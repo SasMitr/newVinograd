@@ -77,7 +77,8 @@
                     <div class="col-3">
                         <h4>Создать заказ:</h4>
                         <a href="{{route('orders.create')}}" class="btn btn-success btn-sm" data-create_order="new">Новый</a>
-                        <a href="{{route('orders.pre.create')}}" class="btn btn-warning btn-sm" data-create_order="pre_new">Предварительный</a>
+                        <a href="{{route('orders.create')}}" class="btn btn-warning btn-sm" data-create_order="new" data-pre_order="pre">Предварительный</a>
+{{--                        <a href="{{route('orders.pre.create')}}" class="btn btn-warning btn-sm" data-create_order="pre_new">Предварительный</a>--}}
                     </div>
                 </div>
 
@@ -248,10 +249,11 @@ window.addEventListener('DOMContentLoaded', function() {
     };
 
     // data-create_order
-    const newOrder = document.querySelector('a[data-create_order="new"]')
-    newOrder.addEventListener('click', (e) => {
+    const orders = document.querySelectorAll('a[data-create_order="new"]')
+    orders.forEach(order => {
+        order.addEventListener('click', (e) => {
         e.preventDefault();
-        let url = newOrder.getAttribute('href');
+        let url = order.getAttribute('href');
 
         getData('', url)
             .then(data => {
@@ -261,6 +263,14 @@ window.addEventListener('DOMContentLoaded', function() {
                     $('#SuccesModal').modal('show');
 
                     let code_form = this.alert.querySelector('form');
+                    if (order.hasAttribute('data-pre_order')) {
+                        let input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'pre_order';
+                        input.value = 'pre';
+                        code_form.appendChild(input);
+                    }
+
                     code_form.addEventListener('submit', (e) => {
                         e.preventDefault();
 
@@ -294,6 +304,7 @@ window.addEventListener('DOMContentLoaded', function() {
             .catch((xhr) => {
                 console.log(xhr);
             });
+        });
     });
 
     const forms = document.querySelectorAll('form[data-name=status]');
