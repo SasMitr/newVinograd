@@ -37,7 +37,8 @@ class OrdersController extends AppOrdersController
         return view('admin.vinograd.order.index', [
             'orders' => $orders,
             'currency' => Currency::all()->keyBy('code')->all(),
-            'statusesList' => OrderService::getArrayStasusesList($orders)
+            'statusesList' => OrderService::getArrayStasusesList($orders),
+            'print_paid' => $status
         ]);
     }
 

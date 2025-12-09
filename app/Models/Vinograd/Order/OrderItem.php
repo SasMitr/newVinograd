@@ -48,9 +48,7 @@ class OrderItem extends Model
     {
         $items = self::getOrderItems($order);
 
-        if (!in_array($order->current_status, [1, 8])) {
-            return $items;
-        }
+        if (!$order->isNew()) return $items;
 
         $in_stock_items = OrderService::getInStockItemsCount($order->created_at);
         return $items->map(function ($item) use ($in_stock_items) {

@@ -19,7 +19,7 @@ final class SentOrderState extends OrderState
 
     public function actions(): void
     {
-        $this->service->checkoutInStock($this->order);
+//        $this->service->checkoutInStock($this->order);
     }
 
     public function humanValue(): string

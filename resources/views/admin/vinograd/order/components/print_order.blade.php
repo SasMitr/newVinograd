@@ -1,19 +1,18 @@
-<div class="mt-3" style="width: 410px;">
+<div class="mt-3" style="width: 480px;">
     <div class="row">
-        <div class="col-12">
+        <div class="col-12" style="font-size: 130%">
             <h5>№: <strong>{{$order->id}}</strong></h5>
-            <p style="font-size: 120%"><strong>{{$order->delivery['method_name']}}</strong></p>
+            <p><strong>{{$order->delivery['method_name']}}</strong></p>
             <p>{{$order->customer['name']}}</p>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
-            <table class="table table-sm table-striped" style="font-size: 120%">
+            <table class="table table-sm table-striped" style="font-size: 130%; width:100%">
                 <thead>
                 <tr>
-                    <th>Название</th>
+                    <th style="width: 60%">Название</th>
                     <th>Кол-во</th>
-                    <th>Цена</th>
                     <th>Всего</th>
                 </tr>
                 </thead>
@@ -25,7 +24,6 @@
                             <strong>{{$item->modification_name}}</strong>
                         </td>
                         <td style="font-size: 120%;"><strong>{{$item->quantity}}</strong> шт.</td>
-                        <td>{{$item->price}} р</td>
                         <td>{{$item->getCost()}} р</td>
                     </tr>
                 @endforeach

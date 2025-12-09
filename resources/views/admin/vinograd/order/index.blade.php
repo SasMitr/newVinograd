@@ -180,22 +180,10 @@
                         </tr>
                     @endforeach
                     @if(request('build'))
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button type="button" class="btn btn-info print">
-                                    Распечатать
-{{--                                    <i class="fa fa-print"></i>--}}
-{{--                                    {{request('build')}}--}}
-                                </button>
-                            </td>
-                            <td></td>
-                        </tr>
+                        <tr><td colspan="7"></td><td><button type="button" class="btn btn-info print" data-url="{{route('orders.print.ajax.orders.build', ['date_build' => request('build')])}}">Распечатать по дате</button></td></tr>
+                    @endif
+                    @if($print_paid == App\Status\Status::PAID)
+                        <tr><td colspan="7"></td><td><button type="button" class="btn btn-info print" data-url="{{route('orders.print.ajax.orders.paid')}}">Распечатать оплаченные</button></td></tr>
                     @endif
                     </tbody>
                 </table>
@@ -218,9 +206,6 @@
 const note_url = '{{route('orders.ajax.admin.note.edit')}}';
 const status_url = '{{route('orders.set_ajax_status')}}';
 const build_url = '{{route('orders.ajax.build')}}';
-const date_print_url = '{{route('orders.print.ajax.orders.build')}}';
-
-const date = '{{request('build')}}';
 
 window.addEventListener('DOMContentLoaded', function() {
 
@@ -248,7 +233,7 @@ window.addEventListener('DOMContentLoaded', function() {
         return await res.json();
     };
 
-    // data-create_order
+    // Создание заказа
     const orders = document.querySelectorAll('a[data-create_order="new"]')
     orders.forEach(order => {
         order.addEventListener('click', (e) => {
@@ -369,36 +354,37 @@ window.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    const print_button = document.querySelector(".print");
-    if (print_button !== null) {
-        print_button.addEventListener('click', (e) => {
-            e.preventDefault();
+    const prints = document.querySelectorAll(".print");
+    prints.forEach(print => {
 
-            let data = {
-                date: date
-            }
-            getData(data, date_print_url)
-                .then(data => {
-                    if (data.success) {
-                        const printCSS = '<link rel="stylesheet" href="/css/adminlte.min.css">';
-                        const windowPrint = window.open('','','left=50,top=50,width=1000,height=800,toolbar=0,scrollbars=1,status=0');
-                        windowPrint.document.write(printCSS);
-                        windowPrint.document.write(data.success.print_order);
-                        windowPrint.document.close();
-                        windowPrint.focus();
-                        windowPrint.print();
-                        windowPrint.close();
+        if (print !== null) {
+            console.log(print.getAttribute('data-url'));
+            print.addEventListener('click', (e) => {
+                e.preventDefault();
 
-                    } else if (data.errors) {
-                        errors_list(data.errors);
-                    } else {
-                        errors_list('Неизвестная ошибка. Повторите попытку, пожалуйста!');
-                    }
-                }).catch((xhr) => {
-                console.log(xhr);
+                getData('', print.getAttribute('data-url'))
+                    .then(data => {
+                        if (data.success) {
+                            const printCSS = '<link rel="stylesheet" href="/css/adminlte.min.css">';
+                            const windowPrint = window.open('','','left=50,top=50,width=1000,height=800,toolbar=0,scrollbars=1,status=0');
+                            windowPrint.document.write(printCSS);
+                            windowPrint.document.write(data.success.print_order);
+                            windowPrint.document.close();
+                            windowPrint.focus();
+                            windowPrint.print();
+                            windowPrint.close();
+
+                        } else if (data.errors) {
+                            errors_list(data.errors);
+                        } else {
+                            errors_list('Неизвестная ошибка. Повторите попытку, пожалуйста!');
+                        }
+                    }).catch((xhr) => {
+                    console.log(xhr);
+                });
             });
-        });
-    }
+        }
+    });
 
     function errors_list(data) {
         $(function() {

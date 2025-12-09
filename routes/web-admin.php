@@ -206,7 +206,8 @@ Route::middleware(['admin'])->group(callback: function () {
 
                         Route::get('/ajax/ajax_print_order', 'ajaxOrder')->name('ajax.print.order');
 
-                        Route::get('/ajax/ajax_print_build', 'ajaxOrdersBuildDate')->name('ajax.orders.build');
+                        Route::get('/ajax/ajax_print/build/{date_build}', 'ajaxOrdersBuildDate')->name('ajax.orders.build');
+                        Route::get('/ajax/ajax_print/paid', 'ajaxOrdersPaid')->name('ajax.orders.paid');
                     });
                 });
             });

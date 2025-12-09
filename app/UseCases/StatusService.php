@@ -43,7 +43,11 @@ class StatusService
                 $this->setStatus($order->id, Status::FORMED);
             }
         });
+    }
 
+    public function isFormed ($order)
+    {
+        return array_search(Status::FORMED, array_column($order->statuses_json, 'value'));
     }
 
     public function remove($order)
@@ -73,10 +77,7 @@ class StatusService
 
     public function returnInStock ($order)
     {
-        $flag = array_filter($order->statuses_json, function($ar) {
-            return $ar['value'] == Status::PAID OR $ar['value'] == Status::SENT;
-        });
-        if($flag){
+        if($this->isFormed($order)){
             foreach ($order->items as $item){
                 $item->modification->returnInStock($item->quantity);
                 $this->modifications->save($item->modification);
@@ -86,14 +87,9 @@ class StatusService
 
     public function checkoutInStock($order)
     {
-        $flag = array_filter($order->statuses_json, function($ar) use ($order) {
-            return $ar['value'] !== $order->current_status AND in_array($ar['value'], Order::SOLD_LIST);
-        });
-        if(!$flag){
-            foreach ($order->items as $item){
-                $item->modification->checkoutInStock($item->quantity);
-                $this->modifications->save($item->modification);
-            }
+        foreach ($order->items as $item){
+            $item->modification->checkoutInStock($item->quantity);
+            $this->modifications->save($item->modification);
         }
     }
 }

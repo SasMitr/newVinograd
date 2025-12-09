@@ -108,7 +108,12 @@ class OrderService
         return DB::transaction(function() use ($id)
         {
             $rep_order = $this->orders->get($id);
-            $new_order = $this->createNewOrder();
+            $customer = new CustomerData(
+                $rep_order->customer['phone'],
+                $rep_order->customer['name'],
+                $rep_order->customer['email']
+            );
+            $new_order = $this->createNewOrder($customer);
 
             $new_order->delivery = $rep_order->delivery;
             $new_order->customer = $rep_order->customer;
@@ -199,6 +204,9 @@ class OrderService
             $modification = Modification::with('product')->find($request->modification_id);
             if(!$pre){
                 $modification->checkout($request->quantity, false);
+                if ($this->statusService->isFormed($order)) {
+                    $modification->checkoutInStock($request->quantity);
+                }
                 $this->modifications->save($modification);
             }
 
@@ -247,9 +255,15 @@ class OrderService
                         //  Уменьшаем
                         if ($item->quantity > $request->quantity) {
                             $item->modification->returnQuantity($item->quantity - $request->quantity);
+                            if ($this->statusService->isFormed($order)) {
+                                $item->modification->returnInStock($item->quantity - $request->quantity);
+                            }
                         } //  Добавляем
                         elseif ($item->quantity < $request->quantity) {
                             $item->modification->checkout($request->quantity - $item->quantity, false);
+                            if ($this->statusService->isFormed($order)) {
+                                $item->modification->checkoutInStock($request->quantity - $item->quantity);
+                            }
                         }
                     }
 
@@ -272,7 +286,7 @@ class OrderService
                 if($item->id == $request->item_id){
                     if(!$pre) {
                         $item->modification->returnQuantity($item->quantity);
-                        if ($order->isPaid() || $order->isSent()){
+                        if ($this->statusService->isFormed($order)){
                             $item->modification->returnInStock($item->quantity);
                         }
                         $this->modifications->save($item->modification);
@@ -433,8 +447,15 @@ class OrderService
                 'mod.id as modification_id'
             )->
             selectRaw('`prod_mod`.`in_stock` - SUM(`items`.`quantity`) as `availability`')->
-            where('created_at', '<=', $date)->
-            whereIn('current_status', [1, 8])->
+            where([
+                ['created_at', '<=', $date],
+                ['current_status', '=', [Status::NEW]],
+            ])->
+            orWhere([
+                ['current_status', '=', [Status::PAID]],
+            ])->
+//            whereIn('current_status', [Status::NEW])->
+//            whereIn('current_status', [Status::NEW, Status::PAID])->
             groupBy('product_id', 'modification_id', 'prod_mod.in_stock')->
             get();
     }

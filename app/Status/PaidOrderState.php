@@ -20,7 +20,7 @@ final class PaidOrderState extends OrderState
 
     function actions(): void
     {
-        $this->service->checkoutInStock($this->order);
+//        $this->service->checkoutInStock($this->order);
     }
 
     function humanValue(): string
