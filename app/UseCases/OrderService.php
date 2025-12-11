@@ -318,7 +318,8 @@ class OrderService
             $order->customer = new CustomerData(
                 $request->input('customer.phone'),
                 $request->input('customer.name'),
-                $request->input('customer.email')
+                $request->input('customer.email'),
+                $request->input('customer.otherPhone')
             );
             $this->orders->save($order);
         });
@@ -374,6 +375,9 @@ class OrderService
             }
             if ($order->customer['phone']) {
                 $query->orWhere('customer', 'like', '%' . preg_replace("/[^\d]/", '', ignorPhone($order->customer['phone'])) . '%');
+            }
+            if (isset($order->customer['otherPhone']) AND $order->customer['otherPhone']) {
+                $query->orWhere('customer', 'like', '%' . preg_replace("/[^\d]/", '', ignorPhone($order->customer['otherPhone'])) . '%');
             }
         });
         $orders = $query->orderBy('id', 'desc')->get();

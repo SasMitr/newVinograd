@@ -75,6 +75,9 @@
                             <address>
                                 <strong>{{$order->customer['name']}}</strong><br>
                                 <i class="fa fa-phone"></i> {{formatPhone($order->customer['phone'])}}<br>
+                                @if(isset($order->customer['otherPhone']) AND $order->customer['otherPhone'])
+                                    <i class="fa fa-phone"></i> {{formatPhone($order->customer['otherPhone'])}}<br>
+                                @endif
                                 <i class="fa  fa-envelope-o"></i> {{$order->customer['email']}}<br>
                                 {{$order->delivery['index']}}<br>
                                 {{$order->delivery['address']}}<br>

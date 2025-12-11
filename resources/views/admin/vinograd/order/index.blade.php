@@ -358,7 +358,6 @@ window.addEventListener('DOMContentLoaded', function() {
     prints.forEach(print => {
 
         if (print !== null) {
-            console.log(print.getAttribute('data-url'));
             print.addEventListener('click', (e) => {
                 e.preventDefault();
 
