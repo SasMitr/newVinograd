@@ -108,12 +108,7 @@ class OrderService
         return DB::transaction(function() use ($id)
         {
             $rep_order = $this->orders->get($id);
-            $customer = new CustomerData(
-                $rep_order->customer['phone'],
-                $rep_order->customer['name'],
-                $rep_order->customer['email']
-            );
-            $new_order = $this->createNewOrder($customer);
+            $new_order = $this->createNewOrder(new CustomerData());
 
             $new_order->delivery = $rep_order->delivery;
             $new_order->customer = $rep_order->customer;
