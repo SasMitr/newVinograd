@@ -107,11 +107,11 @@ class OrderService
     {
         return DB::transaction(function() use ($id)
         {
-            $rep_order = $this->orders->get($id);
+            $old_order = $this->orders->get($id);
             $new_order = $this->createNewOrder(new CustomerData());
 
-            $new_order->delivery = $rep_order->delivery;
-            $new_order->customer = $rep_order->customer;
+            $new_order->delivery = $old_order->delivery;
+            $new_order->customer = $old_order->customer;
             $this->orders->save($new_order);
             return $new_order->id;
         });
@@ -379,14 +379,14 @@ class OrderService
         return $orders->isNotEmpty() ? $orders : false;
     }
 
-    public static function getArrayStasusesList($orders)
+    public static function getArrayStasusesList($orders): array
     {
         $statuses = [];
         foreach ($orders as $order)
         {
             $statuses[$order->id] = $order->statuses->allowedTransitions;
         }
-        return$statuses;
+        return $statuses;
     }
 
     public function setTrackCode($order_id, $track_code)

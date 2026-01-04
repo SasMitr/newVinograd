@@ -180,10 +180,24 @@
                         </tr>
                     @endforeach
                     @if(request('build'))
-                        <tr><td colspan="7"></td><td><button type="button" class="btn btn-info print" data-url="{{route('orders.print.ajax.orders.build', ['date_build' => request('build')])}}">Распечатать по дате</button></td></tr>
+                        <tr>
+                            <td colspan="6"></td>
+                            <td>
+                                <button type="button" class="btn btn-info print" data-url="{{route('orders.print.ajax.orders.build', ['date_build' => request('build')])}}">Распечатать заказы по дате</button><br>
+                                <a href="{{route('dashboard.print.select_orders', ['ids' => $orders->implode('id', ', ')])}}" target="_blank" class="btn btn-primary mt-2">Распечатать список</a>
+                            </td>
+                            <td></td>
+                        </tr>
                     @endif
                     @if($print_paid == App\Status\Status::PAID)
-                        <tr><td colspan="7"></td><td><button type="button" class="btn btn-info print" data-url="{{route('orders.print.ajax.orders.paid')}}">Распечатать оплаченные</button></td></tr>
+                        <tr>
+                            <td colspan="6"></td>
+                            <td>
+                                <button type="button" class="btn btn-info print" data-url="{{route('orders.print.ajax.orders.paid')}}">Распечатать оплаченные заказы</button><br>
+                                <a href="{{route('dashboard.print.select_orders', ['ids' => $orders->implode('id', ', ')])}}" target="_blank" class="btn btn-primary mt-2">Распечатать список</a>
+                            </td>
+                            <td></td>
+                        </tr>
                     @endif
                     </tbody>
                 </table>

@@ -48,6 +48,7 @@ class DashboardService
             groupBy('product_name', 'modification_name')->
             get()->
             groupBy('product_name')->
+            sortBy('product_name')->
             all();
     }
 

@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer">
+            <div class="text-right">
                 <button type="submit" class="btn btn-info">Сохранить</button>
             </div>
         </form>
