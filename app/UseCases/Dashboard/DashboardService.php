@@ -47,8 +47,9 @@ class DashboardService
             selectOrdersByNumbers($order_ids)->
             groupBy('product_name', 'modification_name')->
             get()->
-            groupBy('product_name')->
             sortBy('product_name')->
+            groupBy('product_name')->
+
             all();
     }
 
