@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Vinograd\Modification;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -16,9 +17,19 @@ class CatalogImport implements ToCollection, WithHeadingRow, WithValidation, Ski
 	public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
+            $quantity = $row['quantity'];
             Modification::updateOrCreate(
-                ['product_id' => $row['product_id'], 'modification_id' => $row['modification_id']],
-                ['price' => $row['price'], 'quantity' => $row['quantity'] ?: 0, 'in_stock' => $row['quantity'] ?: 0]
+                [
+                    'product_id' => $row['product_id'],
+                    'modification_id' => $row['modification_id']
+                ],
+                [
+                    'price' => $row['price'],
+                    'quantity' => $row['quantity'] ? DB::raw("$quantity - (in_stock - quantity)") : 0,
+//                    'quantity' => $row['quantity'] ?: 0,
+                    'in_stock' => $row['quantity'] ?: 0
+                ]
+                // 'quantity' => DB::raw("quantity + $quantity"),
             );
         }
     }
