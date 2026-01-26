@@ -25,9 +25,9 @@ class CatalogImport implements ToCollection, WithHeadingRow, WithValidation, Ski
                 ],
                 [
                     'price' => $row['price'],
-                    'quantity' => $row['quantity'] ? DB::raw("$quantity - (in_stock - quantity)") : 0,
+                    'quantity' => $quantity ? DB::raw("$quantity - (in_stock - quantity)") : 0,
 //                    'quantity' => $row['quantity'] ?: 0,
-                    'in_stock' => $row['quantity'] ?: 0
+                    'in_stock' => $quantity ?: 0
                 ]
                 // 'quantity' => DB::raw("quantity + $quantity"),
             );

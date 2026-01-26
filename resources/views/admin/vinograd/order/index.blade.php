@@ -179,7 +179,7 @@
                             </td>
                         </tr>
                     @endforeach
-                    @if(request('build'))
+                    @if($orders->isNotEmpty() && request('build'))
                         <tr>
                             <td colspan="6"></td>
                             <td>
@@ -189,7 +189,7 @@
                             <td></td>
                         </tr>
                     @endif
-                    @if($print_paid == App\Status\Status::PAID)
+                    @if($orders->isNotEmpty() && $print_paid == App\Status\Status::PAID)
                         <tr>
                             <td colspan="6"></td>
                             <td>

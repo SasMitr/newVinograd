@@ -20,39 +20,23 @@
                 </form>
             </div>
             <div class="card-body table-responsive">
-                <table id="example1" class="table table-condensed">
-                    <thead>
-                    <tr>
-                        <th>Название</th>
-                        <th>Модификация</th>
-                        <th>Колличество</th>
-                    </tr>
-                    </thead>
+                <table class="table table-condensed">
                     <tbody>
-                    @forelse($orders as $productName => $modifications)
+                    @forelse($orders as $modificationName => $products)
                         <tr>
-                            <td rowspan="{{$modifications->count()}}">{{$productName}}</td>
-                        @foreach($modifications as $modification)
-
-                            @if(!$loop->first)
-                                <tr>
-                                    @endif
-
-                                    <td>{{$modification->modification_name}}</td>
-                                    <td><b>{{$modification->allQuantity}}</b> шт</td>
-
-                                    @if(!$loop->last)
-                                </tr>
-                                @endif
-
-                                @endforeach
-
-                                </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5"><h3>Нет продаж</h3></td>
-                                    </tr>
-                                @endforelse
+                            <td colspan="2"><h4 class="text-center">{{$modificationName}}</h4></td>
+                        </tr>
+                        @foreach($products as $product)
+                            <tr>
+                                <td>{{$product->product_name}}</td>
+                                <td><b>{{$product->allQuantity}}</b> шт</td>
+                            </tr>
+                        @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="5"><h3>Нет продаж</h3></td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
 

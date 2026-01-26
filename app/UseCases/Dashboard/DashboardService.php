@@ -43,13 +43,11 @@ class DashboardService
                 'mod.name as modification_name'
             )->
             selectRaw('SUM(`items`.`quantity`) as `allQuantity`')->
-            //whereStatus(Order::ORDERED_LIST)->
             selectOrdersByNumbers($order_ids)->
             groupBy('product_name', 'modification_name')->
             get()->
             sortBy('product_name')->
-            groupBy('product_name')->
-
+            groupBy('modification_name')->
             all();
     }
 
