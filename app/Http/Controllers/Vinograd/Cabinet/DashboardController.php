@@ -30,7 +30,10 @@ class DashboardController extends Controller
 
     public function show($order_id)
     {
-        $order = Order::with('items.product', 'items.modification.property')->findOrFail($order_id);
+        $order = Order::query()
+            ->with('items.product', 'items.modification.property')
+            ->where('user_id', Auth::id())
+            ->findOrFail($order_id);
         return view('cabinet.order_view', ['order' => $order]);
     }
 
