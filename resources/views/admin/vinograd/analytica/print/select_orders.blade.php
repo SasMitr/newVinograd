@@ -20,9 +20,9 @@
                             <td colspan="2"><h4 class="text-center">{{$modificationName}}</h4></td>
                         </tr>
                         @foreach($products as $product)
-                            <tr>
-                                <td>{{$product->product_name}}</td>
-                                <td><b>{{$product->allQuantity}}</b> шт</td>
+                            <tr class="h5">
+                                <td class="py-2">{{$product->product_name}}</td>
+                                <td class="py-2"><b>{{$product->allQuantity}}</b> шт</td>
                             </tr>
                         @endforeach
                     @endforeach
