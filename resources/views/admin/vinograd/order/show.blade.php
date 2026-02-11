@@ -126,6 +126,9 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <button type="button" class="copy-order btn-clipboard" data-url="{{route('orders.ajax.copy-order', $order)}}" style="position: absolute; top: 0; right: 8px; border: 0; cursor: pointer;">
+                                copy
+                            </button>
                         </div>
                     </div>
                     <hr>
@@ -174,8 +177,7 @@
                                                     <th style="width:50%">Стоимость доставки:</th>
                                                     <td>
                                                         {{$order->delivery['cost']}} руб <br>
-                                                        ({{mailCurr($currency, $order->delivery['cost'])}} {{$currency->sign}}
-                                                        )
+                                                        ({{mailCurr($currency, $order->delivery['cost'])}} {{$currency->sign}})
                                                     </td>
                                                 </tr>
                                             @endif
@@ -191,8 +193,7 @@
                                                 <th>Итоговая стоимость:</th>
                                                 <td>
                                                     {{$order->getTotalCost()}} руб <br>
-                                                    ({{mailCurr($currency, $order->getTotalCost())}} {{$currency->sign}}
-                                                    )
+                                                    ({{mailCurr($currency, $order->getTotalCost())}} {{$currency->sign}})
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -602,6 +603,36 @@ P.S.
                 });
                 return await res.json();
             };
+
+            //  Копирование заказа в буфер обмена
+            const button = document.querySelector('.copy-order');
+            button.addEventListener('click', (e) => {
+
+                getData('', button.dataset.url)
+                    .then(data => {
+                        if (data.success) {
+
+                            console.log(data.success);
+                            // data.success.select();
+                            // document.execCommand('copy');
+                            // toastr.success('Заказ скопирован в буфер обмена.');
+
+                            navigator.clipboard.writeText(data.success)
+                                .then(() => toastr.success('Заказ скопирован в буфер обмена.'))
+                                .catch(error => console.error(`Текст не скопирован ${error}`))
+
+                        } else if (data.errors) {
+                            errors_list(data.errors);
+                        } else {
+                            console.log(data);
+                            errors_list('Неизвестная ошибка. Повторите попытку, пожалуйста!');
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+
+            });
 
             // добавление заказчика в игнор
             const blocked = document.querySelector('a[data-action=blocked]');
