@@ -611,12 +611,6 @@ P.S.
                 getData('', button.dataset.url)
                     .then(data => {
                         if (data.success) {
-
-                            console.log(data.success);
-                            // data.success.select();
-                            // document.execCommand('copy');
-                            // toastr.success('Заказ скопирован в буфер обмена.');
-
                             navigator.clipboard.writeText(data.success)
                                 .then(() => toastr.success('Заказ скопирован в буфер обмена.'))
                                 .catch(error => console.error(`Текст не скопирован ${error}`))

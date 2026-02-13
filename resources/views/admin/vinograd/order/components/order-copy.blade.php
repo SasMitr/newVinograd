@@ -1,15 +1,16 @@
-----------------------------------
+
+
 @foreach ($items as $item)
 @php $item->setRelation('order', $order) @endphp
 
-{{$item->product_name}}       {{$item->quantity}}шт x {{mailCurr($currency, $item->price)}}{{$currency->sign}} = {{mailCurr($currency, $item->getCost())}}{{$currency->sign}}
-{{$item->modification_name}}
+{{$loop->iteration}}. {{$item->product_name}}       
+   {{$item->modification_name}}    {{$item->quantity}}шт x {{mailCurr($currency, $item->price)}}{{$currency->sign}} = {{mailCurr($currency, $item->getCost())}}{{$currency->sign}}
 @endforeach
 ----------------------------------
 
 Общее количество:
 @foreach ($quantityByModifications as $name => $value)
-{{$name}}: {{$value}}шт
+    {{$name}}: {{$value}}шт
 @endforeach
 ----------------------------------
 
