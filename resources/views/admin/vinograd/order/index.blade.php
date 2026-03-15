@@ -169,9 +169,9 @@
                                         @endif
                                     @endif
                                     <a class="btn btn-outline-secondary btn-sm" href="{{route('orders.show', $order->id)}}" role="button"><i class="fa fa-eye"></i></a>
-                                    @if($order->isRBSent() && $order->isTrackCode())
+                                    @if($order->isSent() && $order->isRBSent() && $order->isTrackCode())
                                         <a class="btn btn-outline-info btn-sm" href="{{config('main.tracking_post')}}{{$order->track_code}}" role="button" target="_blank"><i class="fa fa-truck"></i></a>
-                                    @elseif ($order->isRFSent() && $order->isTrackCode())
+                                    @elseif ($order->isSent() && $order->isRFSent() && $order->isTrackCode())
                                         <a class="btn btn-outline-info btn-sm" href="https://www.pochta.ru/tracking?barcode={{$order->track_code}}" role="button" target="_blank"><i class="fa fa-truck"></i></a>
                                     @endif
 {{--                                    {{Form::open(['route'=>['orders.destroy', $order->id], 'method'=>'delete'])}}--}}
