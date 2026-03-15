@@ -172,6 +172,16 @@ class Order extends Model
         }
     }
 
+    public function isRBSent ()
+    {
+        return $this->delivery['method_id'] == 6;
+    }
+
+    public function isRFSent ()
+    {
+        return $this->delivery['method_id'] == 5;
+    }
+
     public function isBoxberrySent ()
     {
         return $this->delivery['method_id'] == 7;
