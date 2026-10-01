@@ -76,8 +76,9 @@
                     </div>
                     <div class="col-3">
                         <h4>Создать заказ:</h4>
-                        <a href="{{route('orders.create')}}" class="btn btn-success btn-sm">Новый</a>
-                        <a href="{{route('orders.pre.create')}}" class="btn btn-warning btn-sm">Предварительный</a>
+                        <a href="{{route('orders.create')}}" class="btn btn-success btn-sm" data-create_order="new">Новый</a>
+                        <a href="{{route('orders.create')}}" class="btn btn-warning btn-sm" data-create_order="new" data-pre_order="pre">Предварительный</a>
+{{--                        <a href="{{route('orders.pre.create')}}" class="btn btn-warning btn-sm" data-create_order="pre_new">Предварительный</a>--}}
                     </div>
                 </div>
 
@@ -168,8 +169,10 @@
                                         @endif
                                     @endif
                                     <a class="btn btn-outline-secondary btn-sm" href="{{route('orders.show', $order->id)}}" role="button"><i class="fa fa-eye"></i></a>
-                                    @if($order->isSent() && $order->isTrackCode() && !$order->isBoxberrySent())
+                                    @if($order->isSent() && $order->isRBSent() && $order->isTrackCode())
                                         <a class="btn btn-outline-info btn-sm" href="{{config('main.tracking_post')}}{{$order->track_code}}" role="button" target="_blank"><i class="fa fa-truck"></i></a>
+                                    @elseif ($order->isSent() && $order->isRFSent() && $order->isTrackCode())
+                                        <a class="btn btn-outline-info btn-sm" href="https://www.pochta.ru/tracking?barcode={{$order->track_code}}" role="button" target="_blank"><i class="fa fa-truck"></i></a>
                                     @endif
 {{--                                    {{Form::open(['route'=>['orders.destroy', $order->id], 'method'=>'delete'])}}--}}
 {{--                                    <button onclick="return confirm('Подтвердите удаление заказа!')" type="submit" class="btn btn-outline-danger btn-sm"><i class="fa fa-remove"></i></button>--}}
@@ -178,20 +181,22 @@
                             </td>
                         </tr>
                     @endforeach
-                    @if(request('build'))
+                    @if($orders->isNotEmpty() && request('build'))
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td colspan="6"></td>
                             <td>
-                                <button type="button" class="btn btn-info print">
-                                    Распечатать
-{{--                                    <i class="fa fa-print"></i>--}}
-{{--                                    {{request('build')}}--}}
-                                </button>
+                                <button type="button" class="btn btn-info print" data-url="{{route('orders.print.ajax.orders.build', ['date_build' => request('build')])}}">Распечатать заказы по дате</button><br>
+                                <a href="{{route('dashboard.print.select_orders', ['ids' => $orders->implode('id', ', ')])}}" target="_blank" class="btn btn-primary mt-2">Распечатать список</a>
+                            </td>
+                            <td></td>
+                        </tr>
+                    @endif
+                    @if($orders->isNotEmpty() && $print_paid == App\Status\Status::PAID)
+                        <tr>
+                            <td colspan="6"></td>
+                            <td>
+                                <button type="button" class="btn btn-info print" data-url="{{route('orders.print.ajax.orders.paid')}}">Распечатать оплаченные заказы</button><br>
+                                <a href="{{route('dashboard.print.select_orders', ['ids' => $orders->implode('id', ', ')])}}" target="_blank" class="btn btn-primary mt-2">Распечатать список</a>
                             </td>
                             <td></td>
                         </tr>
@@ -217,9 +222,6 @@
 const note_url = '{{route('orders.ajax.admin.note.edit')}}';
 const status_url = '{{route('orders.set_ajax_status')}}';
 const build_url = '{{route('orders.ajax.build')}}';
-const date_print_url = '{{route('orders.print.ajax.orders.build')}}';
-
-const date = '{{request('build')}}';
 
 window.addEventListener('DOMContentLoaded', function() {
 
@@ -246,6 +248,65 @@ window.addEventListener('DOMContentLoaded', function() {
         });
         return await res.json();
     };
+
+    // Создание заказа
+    const orders = document.querySelectorAll('a[data-create_order="new"]')
+    orders.forEach(order => {
+        order.addEventListener('click', (e) => {
+        e.preventDefault();
+        let url = order.getAttribute('href');
+
+        getData('', url)
+            .then(data => {
+                if (data.success) {
+                    this.alert = document.querySelector('#Succes');
+                    this.alert.innerHTML = data.success;
+                    $('#SuccesModal').modal('show');
+
+                    let code_form = this.alert.querySelector('form');
+                    if (order.hasAttribute('data-pre_order')) {
+                        let input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'pre_order';
+                        input.value = 'pre';
+                        code_form.appendChild(input);
+                    }
+
+                    code_form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+
+                        postData(code_form, code_form.getAttribute('action'))
+                            .then (data => {
+                                if(data.success) {
+                                    window.location = data.success;
+                                } else if(data.errors){
+                                    if (this.alert.querySelector(".errors") !== null) {
+                                        this.alert.querySelector(".errors").innerHTML = get_list(data.errors);
+                                    } else {
+                                        const newEl = document.createElement("div");
+                                        newEl.classList.add('alert', 'alert-danger', 'errors');
+                                        newEl.innerHTML = get_list(data.errors);
+                                        this.alert.querySelector(".card-header").replaceWith(newEl);
+                                    }
+                                }else{
+                                    const newEl = document.createElement("div");
+                                    newEl.classList.add('alert', 'alert-danger', 'errors');
+                                    newEl.innerHTML = 'Неизвестная ошибка. Повторите попытку, пожалуйста!';
+                                    this.alert.replaceWith(newEl);
+                                }
+                            })
+                            .catch((error) => {
+                            console.log(error);
+                        });
+                    });
+                }
+
+            })
+            .catch((xhr) => {
+                console.log(xhr);
+            });
+        });
+    });
 
     const forms = document.querySelectorAll('form[data-name=status]');
     forms.forEach(form => {
@@ -309,36 +370,36 @@ window.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    const print_button = document.querySelector(".print");
-    if (print_button !== null) {
-        print_button.addEventListener('click', (e) => {
-            e.preventDefault();
+    const prints = document.querySelectorAll(".print");
+    prints.forEach(print => {
 
-            let data = {
-                date: date
-            }
-            getData(data, date_print_url)
-                .then(data => {
-                    if (data.success) {
-                        const printCSS = '<link rel="stylesheet" href="/css/adminlte.min.css">';
-                        const windowPrint = window.open('','','left=50,top=50,width=1000,height=800,toolbar=0,scrollbars=1,status=0');
-                        windowPrint.document.write(printCSS);
-                        windowPrint.document.write(data.success.print_order);
-                        windowPrint.document.close();
-                        windowPrint.focus();
-                        windowPrint.print();
-                        windowPrint.close();
+        if (print !== null) {
+            print.addEventListener('click', (e) => {
+                e.preventDefault();
 
-                    } else if (data.errors) {
-                        errors_list(data.errors);
-                    } else {
-                        errors_list('Неизвестная ошибка. Повторите попытку, пожалуйста!');
-                    }
-                }).catch((xhr) => {
-                console.log(xhr);
+                getData('', print.getAttribute('data-url'))
+                    .then(data => {
+                        if (data.success) {
+                            const printCSS = '<link rel="stylesheet" href="/css/adminlte.min.css">';
+                            const windowPrint = window.open('','','left=50,top=50,width=1000,height=800,toolbar=0,scrollbars=1,status=0');
+                            windowPrint.document.write(printCSS);
+                            windowPrint.document.write(data.success.print_order);
+                            windowPrint.document.close();
+                            windowPrint.focus();
+                            windowPrint.print();
+                            windowPrint.close();
+
+                        } else if (data.errors) {
+                            errors_list(data.errors);
+                        } else {
+                            errors_list('Неизвестная ошибка. Повторите попытку, пожалуйста!');
+                        }
+                    }).catch((xhr) => {
+                    console.log(xhr);
+                });
             });
-        });
-    }
+        }
+    });
 
     function errors_list(data) {
         $(function() {

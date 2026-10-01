@@ -64,6 +64,13 @@
                             {{ $errors->first('customer.phone') ? $errors->first('customer.phone') : '' }}
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="customer[otherPhone]">Дополнительный Телефон</label>
+                        <input type="text" name="customer[otherPhone]" class="form-control{{ $errors->first('customer.otherPhone') ? ' is-invalid' : '' }}" value="{{ old('customer.otherPhone', isset($order->customer['otherPhone']) ? formatPhone($order->customer['otherPhone']) : '') }}" id="customer[otherPhone]">
+                        <div class="invalid-feedback" id="invalid-customer[otherPhone]">
+                            {{ $errors->first('customer.otherPhone') ? $errors->first('customer.otherPhone') : '' }}
+                        </div>
+                    </div>
                 </div>
             </div>
             </div>

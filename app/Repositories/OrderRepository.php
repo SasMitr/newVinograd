@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Vinograd\Order\Order;
 use App\Models\Vinograd\Order\Order as Model;
+use App\Status\Status;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -39,7 +40,10 @@ class OrderRepository extends CoreRepository
                     $query->orWhere('customer', 'like', '%' . preg_replace("/[^\d]/", '', $request->phone) . '%');
                 })->
                 when($request->build, function (Builder $query) use ($request) {
-                    $query->orWhere('date_build', $request->build);
+                    $query->orWhere(function (Builder $query) use ($request) {
+                            $query->where('date_build', $request->build)
+                                  ->whereIn('current_status', [Status::NEW, Status::PAID]);
+                        });
                 });
             },
             function (Builder $query) use ($status) {

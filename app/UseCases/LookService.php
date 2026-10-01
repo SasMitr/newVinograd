@@ -10,7 +10,8 @@ class LookService
 {
     public static function getLookProducts()
     {
-        if(!$arToBasket = json_decode(Cookie::get('look'))) return false;
+        if (!Cookie::has('look'))  return false;
+        $arToBasket = json_decode(Cookie::get('look'));
 
         return Product::select('id', 'slug', 'name')
             ->with('modifications.property')

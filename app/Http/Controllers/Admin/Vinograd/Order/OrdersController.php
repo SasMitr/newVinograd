@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers\Admin\Vinograd\Order;
 
+use App\Http\Requests\Admin\Vinograd\Order\CustomerRequest;
 use App\Http\Requests\Admin\Vinograd\Order\SendReplyMailRequest;
 use App\Mail\Admin\OrderAddMail;
 use App\Models\Vinograd\Currency;
 use App\Models\Vinograd\DeliveryMethod;
+use App\Models\Vinograd\Ignore;
+use App\Models\Vinograd\Order\CustomerData;
 use App\Models\Vinograd\Order\Order;
 use App\Models\Vinograd\Order\OrderItem;
 use App\Notifications\OrderCustomerMail;
 use App\Repositories\OrderRepository;
 use App\Repositories\ProductRepository;
+use App\Status\Status;
 use App\UseCases\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class OrdersController extends AppOrdersController
 {
@@ -32,17 +37,35 @@ class OrdersController extends AppOrdersController
         return view('admin.vinograd.order.index', [
             'orders' => $orders,
             'currency' => Currency::all()->keyBy('code')->all(),
-            'statusesList' => OrderService::getArrayStasusesList($orders)
+            'statusesList' => OrderService::getArrayStasusesList($orders),
+            'print_paid' => $status
         ]);
     }
 
-    public function create(OrderService $service)
+    public function create()
     {
-        $order = $service->createNewOrder();
-        return redirect()->route('orders.delivery.edit', $order->id);
+        return [
+            'success' => view('admin.vinograd.order.components.customer_form')->render()
+        ];
     }
 
-    public function store(Request $request){}
+    public function store(CustomerRequest $request, OrderService $service){
+
+        if (Ignore::isIgnore($request->input('customer.email'), ignorPhone($request->input('customer.phone')))->blocked()->exists()) {
+            throw ValidationException::withMessages(['ВНИМАНИЕ! Заказчик заблокирован']);
+        }
+        $customer = new CustomerData(
+            $request->input('customer.phone'),
+            $request->input('customer.name'),
+            $request->input('customer.email')
+        );
+        $status = $request->input('pre_order') ? Status::PRELIMINARY : Status::NEW;
+        if (!$order = $service->createNewOrder($customer, $status)) {
+            throw ValidationException::withMessages(['Ошибка создания заказа']);
+        }
+        $routeName = $request->input('pre_order') ? 'orders.pre.edit' : 'orders.edit';
+        return ['success' => route($routeName, $order->id)];
+    }
 
     public function show($id)
     {

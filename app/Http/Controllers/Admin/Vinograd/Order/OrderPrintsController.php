@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Vinograd\Order;
 
+use App\Http\Requests\Admin\Vinograd\Order\Print\DateBuildRequest;
+use App\Http\Requests\Admin\Vinograd\Order\Print\PaidRequest;
 use App\Models\Vinograd\Currency;
 use App\Models\Vinograd\Order\Order;
 use App\Models\Vinograd\Order\OrderItem;
@@ -9,6 +11,7 @@ use App\Status\Status;
 use App\UseCases\NumberToStringService;
 use App\UseCases\OrderService;
 use App\UseCases\StatusService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -67,16 +70,24 @@ class OrderPrintsController extends AppOrdersController
         }
     }
 
-    public function ajaxOrdersBuildDate(Request $request, StatusService $statusService, OrderService $orderService)
+    public function ajaxOrdersBuildDate(StatusService $statusService, OrderService $orderService, $date_build)
     {
-        $v = Validator::make($request->all(), [
-            'date' => 'required'
-        ]);
-        if ($v->fails()) {
-            return ['errors' => $v->errors()];
-        }
+        $orders = Order::query()
+            ->where('date_build', $date_build)
+            ->whereIn('current_status', [Status::NEW, Status::PAID])
+            ->get();
+        return $this->sentOrdersForPrint ($orders, $statusService, $orderService);
+    }
+
+    public function ajaxOrdersPaid(StatusService $statusService, OrderService $orderService)
+    {
+        $orders = Order::where('current_status', Status::PAID)->get();
+        return $this->sentOrdersForPrint ($orders, $statusService, $orderService);
+    }
+
+    private function sentOrdersForPrint ($orders, $statusService, $orderService)
+    {
         try {
-            $orders = Order::where('date_build', $request->get('date'))->whereIn('current_status', Status::orderEditable())->get();
             $print_order = '';
             foreach ($orders as $order) {
                 $items = OrderItem::getOrderSortedByItems($order);

@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\Vinograd\Exel\UpdateCatalogController;
 use App\Http\Controllers\Admin\Vinograd\IgnoresController;
 use App\Http\Controllers\Admin\Vinograd\MailsController;
 use App\Http\Controllers\Admin\Vinograd\ModificationsController;
+use App\Http\Controllers\Admin\Vinograd\Order\OrderCopyController;
 use App\Http\Controllers\Admin\Vinograd\Order\OrderPrintsController;
 use App\Http\Controllers\Admin\Vinograd\Order\OrdersController;
 use App\Http\Controllers\Admin\Vinograd\Order\OrdersDeliveryController;
@@ -67,6 +68,8 @@ Route::middleware(['admin'])->group(callback: function () {
                 Route::post('/orders/pre_update_item/{order_id}', 'updateItem')->name('orders.pre.update.item');
                 Route::post('/orders/pre_delete_item/{order_id}', 'deleteItem')->name('orders.pre.delete.item');
             });
+
+            Route::get('/copy-order/{order}', OrderCopyController::class)->name('orders.ajax.copy-order');
 
             Route::controller(OrdersController::class)->group(function () {
                 Route::get('/orders','index')->name('orders.index');
@@ -155,7 +158,8 @@ Route::middleware(['admin'])->group(callback: function () {
                 Route::get('/ignores/{id}/edit', 'edit')->name('ignores.edit');
                 Route::patch('/ignores/{id}', 'update')->name('ignores.update');
                 Route::get('/ignores/toggle/{id}', 'toggle')->name('ignores.toggle');
-                Route::get('/ignores/blocked/{id}', 'blocked')->name('ignores.blocked');
+                Route::get('/ignores/blocked/{id}', 'blockedForm')->name('ignores.blocked.form');
+                Route::post('/ignores/blocked/store', 'blockedStore')->name('ignores.blocked.store');
             });
 
             Route::controller(UpdateCatalogController::class)->group(function () {
@@ -205,7 +209,8 @@ Route::middleware(['admin'])->group(callback: function () {
 
                         Route::get('/ajax/ajax_print_order', 'ajaxOrder')->name('ajax.print.order');
 
-                        Route::get('/ajax/ajax_print_build', 'ajaxOrdersBuildDate')->name('ajax.orders.build');
+                        Route::get('/ajax/ajax_print/build/{date_build}', 'ajaxOrdersBuildDate')->name('ajax.orders.build');
+                        Route::get('/ajax/ajax_print/paid', 'ajaxOrdersPaid')->name('ajax.orders.paid');
                     });
                 });
             });

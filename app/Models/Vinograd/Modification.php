@@ -66,17 +66,17 @@ class Modification extends Model
         $this->quantity += $quantity;
     }
 
-    public function returnInStock($quantity) // Применять если отменяется заказ со статусом отправлен или оплачен
-    {
-        $this->in_stock += $quantity;
-    }
-
     public function checkoutInStock($quantity)
     {
         if ($quantity > $this->in_stock) {
             throw new \RuntimeException($this->product->name.' - '.$this->property->name.'.<br>Наличие товара уходит в минус. Необходимо откорректировать наличие товара.');
         }
         $this->in_stock -= $quantity;
+    }
+
+    public function returnInStock($quantity) // Применять если отменяется заказ со статусом отправлен или оплачен
+    {
+        $this->in_stock += $quantity;
     }
 
     public function isIdEqualTo($id)
