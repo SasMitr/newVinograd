@@ -14,6 +14,7 @@
 
     <div class="col">
         <h2 class="p-4">
+{{--            Можно оптимизировать--}}
             @switch(request('status'))
                 @case(null) Выполненные заказы @break
                 @case(7) Предварительные заказы @break
