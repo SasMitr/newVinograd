@@ -1,4 +1,4 @@
-<div class="btn-toolbar mt-1">
+<div class="btn-toolbar mb-2">
     <div class="input-group">
         <form action="?" method="GET">
             <div class="input-group input-group-sm">

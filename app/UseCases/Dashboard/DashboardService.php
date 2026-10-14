@@ -5,12 +5,13 @@ namespace App\UseCases\Dashboard;
 use App\Models\Vinograd\DeliveryMethod;
 use App\Models\Vinograd\Order\Order;
 use App\UseCases\OrderService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class DashboardService
 {
 
-    public function getCompletedOrdersItemsArray($dateRange, $status)
+    public function getCompletedOrdersItemsArray($dateRange, $status, $archive = false)
     {
         return OrderService::RawJoin()->
             select(
@@ -24,7 +25,12 @@ class DashboardService
                `items`.`price` * SUM(`items`.`quantity`) as `cost`,
                SUM(`items`.`quantity`) as `allQuantity`
             ')->
-            whereStatus($status)->
+            when($archive, function (Builder $query) {
+                $query->whereNotInStatus();
+            }, function (Builder $query) use ($status){
+                $query->whereStatus($status);
+            })->
+//            whereStatus($status)->
             timeRange($dateRange, $status)->
             groupBy('product_name', 'modification_name', 'price', 'product_id', 'modification_id')->
             orderByDesc('cost')->
@@ -115,9 +121,15 @@ class DashboardService
             orderByDesc('allQuantity');
     }
 
-    public function getTotalCostCompletedOrders($dateRange, $status)
+    public function getTotalCostCompletedOrders($dateRange, $status, $archive = false)
     {
-        return Order::whereStatus($status)->timeRange($dateRange, $status)->sum('cost');
+        return Order::query()->
+            when(!$archive, function (Builder $query) use ($status) {
+                $query->whereStatus($status);
+            })->
+//            whereStatus($status)->
+            timeRange($dateRange, $status)->
+            sum('cost');
     }
 
     public static function getArrayOfYears()

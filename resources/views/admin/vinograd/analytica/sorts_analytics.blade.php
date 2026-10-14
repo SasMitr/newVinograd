@@ -13,30 +13,28 @@
 @section('content')
 
     <div class="col">
-        @if (!request('status'))
-            <h2>Выполненные заказы <small>{!! $titleDate !!}</small></h2>
-        @elseif (request('status') == 7)
-            <h2>Предварительные заказы <small>{!! $titleDate !!}</small></h2>
-        @elseif (request('status') == 1)
-            <h2>Новые заказы <small>{!! $titleDate !!}</small></h2>
-        @elseif (request('status') == 2)
-            <h2>Оплаченные заказы <small>{!! $titleDate !!}</small></h2>
-        @elseif (request('status') == 3)
-            <h2>Отправленные заказы <small>{!! $titleDate !!}</small></h2>
-        @elseif (request('status') == 8)
-            <h2>Сформированные заказы <small>{!! $titleDate !!}</small></h2>
-        @endif
+        <h2 class="p-4">
+            @switch(request('status'))
+                @case(null) Выполненные заказы @break
+                @case(7) Предварительные заказы @break
+                @case(1) Новые заказы @break
+                @case(2) Оплаченные заказы @break
+                @case(3) Отправленные заказы @break
+                @case(8) Сформированные заказы @break
+            @endswitch
+            <small>{!! $titleDate !!}</small>
+        </h2>
         <div class="card">
             <div class="card-header">
-                Показать заказы:
-                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => '']))}}" class="btn btn-info btn-sm">Выполненные</a>
-                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 1]))}}" class="btn btn-success btn-sm">Новые</a>
-                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 2]))}}" class="btn btn-primary btn-sm">Оплаченные</a>
-                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 3]))}}" class="btn btn-secondary btn-sm">Отправленные</a>
-                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 7]))}}" class="btn btn-warning btn-sm">Предварительные</a>
-                <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 8]))}}" class="btn btn-default btn-sm">Сформированные</a>
-
                 @include('admin.vinograd.analytica._periodpicker', ['route' => 'dashboard.sorts'])
+                <div class="mb-2">
+                    <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => '']))}}" class="btn btn-info btn-sm">Выполненные</a>
+                    <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 1]))}}" class="btn btn-success btn-sm">Новые</a>
+                    <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 2]))}}" class="btn btn-primary btn-sm">Оплаченные</a>
+                    <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 3]))}}" class="btn btn-secondary btn-sm">Отправленные</a>
+                    <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 7]))}}" class="btn btn-warning btn-sm">Предварительные</a>
+                    <a href="{{route('dashboard.sorts', array_merge(request()->query(), ['status' => 8]))}}" class="btn btn-default btn-sm">Сформированные</a>
+                </div>
 
                 <div class="card-tools">
                     <h3 class="card-title">Итого: <b>{{$totalCost}}</b> руб</h3>

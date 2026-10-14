@@ -254,16 +254,16 @@ class Order extends Model
 
     ##########################
 
-    public function scopeTimeRange($query, $dateRange, $status)
-    {
-        $data = !isset($status) ? 'completed_at' : 'created_at';
-//        $data = !$status ? 'completed_at' : 'created_at';
-        $query->where($data, '>=', $dateRange['from']);
-        if ($dateRange['to']) {
-            $query->where($data, '<=', $dateRange['to']);
-        }
-        return $query;
-    }
+//    public function scopeTimeRange($query, $dateRange, $status)
+//    {
+//        $data = !isset($status) ? 'completed_at' : 'created_at';
+////        $data = !$status ? 'completed_at' : 'created_at';
+//        $query->where($data, '>=', $dateRange['from']);
+//        if ($dateRange['to']) {
+//            $query->where($data, '<=', $dateRange['to']);
+//        }
+//        return $query;
+//    }
 
     public function scopeStatus($query, $status)
     {
@@ -272,15 +272,15 @@ class Order extends Model
             : $query;
     }
 
-    public function scopeWhereStatus($query, $status)
-    {
-        if (is_array($status)) {
-            return $query->whereIn('current_status', $status);
-        }
-        return $status
-            ? $query->where('current_status', $status)
-            : $query->where('current_status', Status::COMPLETED);
-    }
+//    public function scopeWhereStatus($query, $status)
+//    {
+//        if (is_array($status)) {
+//            return $query->whereIn('current_status', $status);
+//        }
+//        return $status
+//            ? $query->where('current_status', $status)
+//            : $query->where('current_status', Status::COMPLETED);
+//    }
 
     public function scopeSelectOrdersByNumbers($query, $order_ids)
     {

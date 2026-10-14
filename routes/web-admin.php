@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AppAjaxController;
 use App\Http\Controllers\Admin\Blog\PostsController;
+use App\Http\Controllers\Admin\Dashboard\ArchiveDashboardController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Dashboard\DeliverysDashboardController;
 use App\Http\Controllers\Admin\Dashboard\ModificationsDashboardController;
@@ -39,6 +40,10 @@ Route::middleware(['admin'])->group(callback: function () {
             Route::controller(DashboardController::class)->group(function () {
                 Route::get('/sorts', 'index')->name('sorts');
                 Route::get('/orders_as_modification/{product_id}/{modification_id}/{price}', 'allOrdersAsModfication')->name('orders_as_modification');
+            });
+
+            Route::controller(ArchiveDashboardController::class)->group(function () {
+                Route::get('/archive', 'index')->name('archive');
             });
 
             Route::controller(OrderedsDashboardController::class)->group(function () {

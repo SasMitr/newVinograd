@@ -34,10 +34,10 @@ input {
     outline: medium none;
     color: #434343;
 }
-.uppercase { 
+.uppercase {
     text-transform: uppercase
 }
-.capitalize { 
+.capitalize {
     text-transform: capitalize
 }
 h1,
@@ -58,8 +58,8 @@ h2 a,
 h3 a,
 h4 a,
 h5 a,
-h6 a { 
-    color: inherit; 
+h6 a {
+    color: inherit;
 }
 h1 {
     font-size: 36px;
@@ -474,7 +474,7 @@ textarea:focus {
 
 
 /***************************
-    Page section padding 
+    Page section padding
 ****************************/
 .ptb-0 { padding: 0 }
 .ptb-10 { padding: 10px 0 }
@@ -494,7 +494,7 @@ textarea:focus {
 .ptb-150 { padding: 150px 0 }
 
 /***************************
-    Page section margin 
+    Page section margin
 ****************************/
 .mtb-0 { margin: 0 }
 .mtb-10 { margin: 10px 0 }
@@ -514,7 +514,7 @@ textarea:focus {
 .mtb-140 { margin: 140px 0 }
 .mtb-150 { margin: 150px 0; }
  /*************************************
-    Background variation set 
+    Background variation set
  **************************************/
 /*colored background*/
  .white-bg { background: #fff !important; }
@@ -544,7 +544,7 @@ textarea:focus {
 .bg-opacity-white-70:before,
 .bg-opacity-white-80:before,
 .bg-opacity-white-90:before{
-    content: ""; height: 100%; left: 0; position: absolute; top: 0; width: 100%; z-index: -1; 
+    content: ""; height: 100%; left: 0; position: absolute; top: 0; width: 100%; z-index: -1;
 }
  .bg-opacity-black-10:before {  background: rgba(0, 0, 0, 0.1);}
  .bg-opacity-black-20:before {  background: rgba(0, 0, 0, 0.2);}
@@ -599,9 +599,9 @@ textarea:focus {
 /*-------------------
 Common Style CSS
 -------------------*/
-.slick-slide:active, 
-.slick-slide:focus{ 
-    outline: none; 
+.slick-slide:active,
+.slick-slide:focus{
+    outline: none;
 }
 .tab-content {
     width: 100%;
@@ -613,14 +613,14 @@ Common Style CSS
     visibility: hidden;
     overflow: hidden;
     opacity: 0;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; 
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
 }
 .tab-content .tab-pane.active {
     height: auto;
     visibility: visible;
     opacity: 1;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-    overflow: visible; 
+    overflow: visible;
 }
 .vbox-close {
 	background: #abd373 url("https://d29u17ylf1ylz9.cloudfront.net/plantmore-v3/close.gif") no-repeat scroll 10px center !important;
@@ -1084,7 +1084,7 @@ Common Style CSS
 	display: block;
 }
 .mini-cart:hover > a{
-    color: #abd373; 
+    color: #abd373;
 }
 .cart-icon {
 	position: absolute;
@@ -1537,7 +1537,7 @@ Common Style CSS
 	color: #fff;
 }
 .header-top-language-currency .switcher-menu > ul > li:hover > a{
-    color: #abd373; 
+    color: #abd373;
 }
 .header-top-right .menu-top-menu > li {
 	display: inline-block;
@@ -2010,7 +2010,7 @@ Common Style CSS
     text-align: center;
 }
 /*---------------------------
-    6. Shop Categories Area CSS
+    6. Vinograd Categories Area CSS
 -----------------------------*/
 .cat-1 {
 	width: 39%;
@@ -2186,7 +2186,7 @@ Common Style CSS
 }
 .product-action > ul > li > a:hover{
     color: #abd373;
-} 
+}
 .product-content {
 	padding: 20px 15px 25px 15px;
 	text-align: center;
@@ -2444,7 +2444,7 @@ Common Style CSS
   width: auto;
   color: #999;
   font-size: 14px;
-  font-weight: normal; 
+  font-weight: normal;
 }
 .single-count:after {
   content: ':';
@@ -3584,7 +3584,7 @@ h2.entry-title > a:hover {
 	background: #abd373;
 }
 /*----------------------------------
-    16. Shop Collection Area CSS
+    16. Vinograd Collection Area CSS
 ------------------------------------*/
 .shop-collection-area .col-left,
 .shop-collection-area .col-right {
@@ -3850,7 +3850,7 @@ li.right-menu .cat-mega-menu > li {
     opacity: 1;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
     visibility: visible;
-} 
+}
 .sidebar-layout .featured-product {
 	border: 1px solid #e5e5e5;
 	padding-bottom: 35px;
@@ -3986,7 +3986,7 @@ li.right-menu .cat-mega-menu > li {
 	background-color: #666;
 }
 /*---------------------
-    20. Shop Page CSS
+    20. Vinograd Page CSS
 -----------------------*/
 .shop-sidebar {
 	margin-bottom: 55px;
@@ -4388,7 +4388,7 @@ li.right-menu .cat-mega-menu > li {
 }
 .product-tab-menu:hover .slick-arrow{
     opacity: 1;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)" 
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"
 }
 .product-large-thumb{
     position: relative;
@@ -4815,7 +4815,7 @@ max-width: none !important;
     outline-color: #abd373;
 }
 /*-------------------------
-     22. Wishlist Page CSS 
+     22. Wishlist Page CSS
 ---------------------------*/
 .table-content table {
 	background: #fff none repeat scroll 0 0;
@@ -4889,7 +4889,7 @@ max-width: none !important;
     color: #fff;
 }
 /*-------------------------
-     23. Cart Page CSS 
+     23. Cart Page CSS
 ---------------------------*/
 .plantmore-product-quantity input {
 	color: #222555;
@@ -4991,7 +4991,7 @@ max-width: none !important;
     border-color: #abd373;
 }
 /*-------------------------
-     24. Checkout Page CSS 
+     24. Checkout Page CSS
 ---------------------------*/
 .coupon-accordion h3 {
 	background-color: #f7f6f7;
@@ -6061,7 +6061,7 @@ a.ideas-btn:hover{
 	margin-bottom: 0;
 }
 /*-------------------------
-      29. FAQ Page CSS 
+      29. FAQ Page CSS
 ---------------------------*/
 .faq-desc {
 	margin-bottom: 90px;
@@ -6335,7 +6335,7 @@ a.ideas-btn:hover{
             transform: scale(0);
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
-    
+
 }
 .social-link > li > a:hover:before,
 .social-link > li > a:hover:after{
@@ -6448,8 +6448,8 @@ a.ideas-btn:hover{
 	top: 60%;
 	left: 50%;
 	-webkit-transform: translateX(-50%) perspective(600px) rotateX(90deg);
-	        transform: translateX(-50%) perspective(600px) rotateX(90deg); 
-    -webkit-transform-origin: 50% 100% 0; 
+	        transform: translateX(-50%) perspective(600px) rotateX(90deg);
+    -webkit-transform-origin: 50% 100% 0;
             transform-origin: 50% 100% 0;
     opacity: 0;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
@@ -6460,7 +6460,7 @@ a.ideas-btn:hover{
     opacity: 1;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
     -webkit-transform: translateX(-50%) perspective(600px) rotateX(0deg);
-            transform: translateX(-50%) perspective(600px) rotateX(0deg); 
+            transform: translateX(-50%) perspective(600px) rotateX(0deg);
 }
 .content > .title {
 	font-size: 13px;
@@ -6503,7 +6503,7 @@ a.ideas-btn:hover{
 	color: #fff;
 }
 /*-------------------------
-     32. 404 Page CSS 
+     32. 404 Page CSS
 ---------------------------*/
 .error-404-area {
 	border-top: 1px solid #f0f0f0;
@@ -6585,7 +6585,7 @@ a.ideas-btn:hover{
     background: #333;
 }
 /*-------------------------
-    Post-info-bloc 
+    Post-info-bloc
 ---------------------------*/
 .post-thumbnail {
 	position: relative;

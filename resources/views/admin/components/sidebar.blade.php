@@ -13,6 +13,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('dashboard.archive')}}" class="nav-link{{$dashboard_archive_active ?? ''}}">
+                        <p>Архив</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('dashboard.modifications')}}" class="nav-link{{$dashboard_modification_active ?? ''}}">
                         <p>По модификациям</p>
                     </a>

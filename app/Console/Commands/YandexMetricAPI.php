@@ -14,7 +14,7 @@ class YandexMetricAPI extends Command
         $token = 'AgAAAAAG6A33AAYBULcb3tP6V09YkgVZ5gweOaU';
 
         $params = array(
-            'ids'     => 'Номер счетчика',
+            'ids'     => 'Номер счетчика', // 54737767
             'metrics' => 'ym:s:visits,ym:s:pageviews,ym:s:users,ym:s:bounceRate,ym:s:pageDepth,ym:s:avgVisitDurationSeconds',
             'date1'   => 'today', // 7daysAgo - неделя, 30daysAgo - месяц, 365daysAgo - год
             'date2'   => 'today',
@@ -67,4 +67,40 @@ class YandexMetricAPI extends Command
         }
     }
 }
+
+/*
+public function getAnalytics()
+    {
+        // 1. Извлекаем данные конфигурации
+        $token = env('YANDEX_METRIKA_TOKEN');
+        $counterId = env('YANDEX_METRIKA_COUNTER_ID');
+
+        // 2. Делаем GET-запрос к API Метрики
+        $response = Http::withHeaders([
+            'Authorization' => 'OAuth ' . $token,
+        ])->get('https://yandex.net', [
+            'ids' => $counterId,
+            'metrics' => 'ym:s:visits,ym:s:pageviews', // Метрики: визиты и просмотры
+            'date1' => '7daysAgo',                     // Начальная дата
+            'date2' => 'today',                         // Конечная дата
+        ]);
+
+        // 3. Обрабатываем ответ
+        if ($response->successful()) {
+            $data = $response->json();
+
+            // Здесь будет массив с результатами
+            return response()->json([
+                'success' => true,
+                'data' => $data['data'] ?? []
+            ]);
+        }
+
+        // В случае ошибки
+        return response()->json([
+            'success' => false,
+            'error' => $response->body()
+        ], $response->status());
+    }
+ */
 

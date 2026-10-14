@@ -50,11 +50,14 @@ class CheckoutController extends Controller
             $this->service->isIgnore($request);
             $order = $this->service->checkout($request);
             $this->service->sendMail($order);
+            
+            $msg = view('components.order-accepted', ['orderID' => $order->id])->render();
 
             return redirect()->
                    route((Auth::user()) ? 'vinograd.cabinet.home' : 'vinograd.category')->
-                   with('status', 'Заказ сохранен. № заказа: ' . $order->id . '. Саженцы будут готовы на конец октября - начало ноября, черенки на конец ноября начало декабря. Как только все будет готово, мы с Вами свяжемся для уточнения деталей!')->
-                   withErrors(['<h4>ВНИМАНИЕ! Если от нас не поступает обратная связь, посмотрите письма в папке СПАМ</h4>']);
+                   with('status', $msg);
+                   //with('status', 'Заказ сохранен. № заказа: ' . $order->id . '. Как только все будет готово, мы с Вами свяжемся для уточнения деталей!')->
+                   //withErrors(['<h4>ВНИМАНИЕ! Если от нас не поступает обратная связь, посмотрите письма в папке СПАМ</h4>']);
 
         } catch (\DomainException $e) {
             return redirect()->route('vinograd.cart.ingex')->withErrors([$e->getMessage()]);
