@@ -332,10 +332,10 @@ class OrderService
 
     public function sendMail($order)
     {
-        Mail::to(config('main.admin_email'))->send(new OrderAddMail($order));
+//        Mail::to(config('main.admin_email'))->send(new OrderAddMail($order));
 
         if($order->customer['email']) {
-            $order->notify(new OrderCustomerMail($order));
+//            $order->notify(new OrderCustomerMail($order));
         }
     }
 

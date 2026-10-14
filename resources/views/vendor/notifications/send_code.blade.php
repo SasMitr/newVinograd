@@ -7,8 +7,8 @@
 {{--<p>Отслеживать посылку по трек коду можно <a href="https://webservices.belpost.by/searchRu/{{$code}}" rel="nofollow">ЗДЕСЬ</a></p>--}}
 {{--<p>Отслеживать посылку по трек коду можно <a href="https://belpost.by/Otsleditotpravleniye?number={{$code}}" rel="nofollow">ЗДЕСЬ</a></p>--}}
 <h3>Отслеживание:</h3>
-<p>Обычная почта <a href="{{config('main.tracking_post')}}{{$code}}" rel="nofollow">ЗДЕСЬ</a></p>
-<p>Boxberry <a href="https://boxberry.ru/tracking-page" rel="nofollow">ЗДЕСЬ</a></p>
+<p>Почта Беларуси <a href="{{config('main.tracking_post')}}{{$code}}" rel="nofollow">ЗДЕСЬ</a></p>
+<p>Почта России <a href="https://www.pochta.ru/tracking?barcode={{$code}}" rel="nofollow">ЗДЕСЬ</a></p>
 @endcomponent
 
 @component('mail::table')

@@ -4,11 +4,12 @@ namespace App\Models\Vinograd\QueryBuilder;
 
 use App\Status\Status;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class OrderQueryBuilder extends Builder
 {
 
-    public function getAllUserOrders($user_id)
+    public function getAllUserOrders($user_id) :LengthAwarePaginator
     {
         return $this->where('user_id', $user_id)
             ->orderBy('current_status')

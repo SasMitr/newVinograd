@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="ru">
+<html class="no-js" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">

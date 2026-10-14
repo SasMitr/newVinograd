@@ -50,7 +50,7 @@ class CheckoutController extends Controller
             $this->service->isIgnore($request);
             $order = $this->service->checkout($request);
             $this->service->sendMail($order);
-            
+
             $msg = view('components.order-accepted', ['orderID' => $order->id])->render();
 
             return redirect()->
