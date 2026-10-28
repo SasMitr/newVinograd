@@ -8,6 +8,7 @@ use App\Models\Vinograd\Currency;
 use App\Models\Vinograd\Order\Order;
 use App\Models\Vinograd\Order\OrderItem;
 use App\Status\Status;
+use App\Support\Transaction;
 use App\UseCases\NumberToStringService;
 use App\UseCases\OrderService;
 use App\UseCases\StatusService;
@@ -27,12 +28,13 @@ class OrderPrintsController extends AppOrdersController
             $orderService->setPrintCount($id);
             $statusService->setPrintStatus($id);
 
-                return view('admin.vinograd.order.print.order', [
-                    'order' => $order,
-                    'items' => $items,
-                    'quantityByModifications' => $quantityByModifications,
-                    'currency' => Currency::where('code', $order->currency)->first()
-                ]);
+            return view('admin.vinograd.order.print.order', [
+                'order' => $order,
+                'items' => $items,
+                'quantityByModifications' => $quantityByModifications,
+                'currency' => Currency::where('code', $order->currency)->first()
+            ]);
+
         } catch  (\RuntimeException $e) {
             return redirect()->route('orders.print.order', $id)->withErrors([$e->getMessage()]);
         }
@@ -87,14 +89,14 @@ class OrderPrintsController extends AppOrdersController
 
     private function sentOrdersForPrint ($orders, $statusService, $orderService)
     {
-        try {
+        $a = Transaction::run(function () use ($orders, $statusService, $orderService) {
             $print_order = '';
             foreach ($orders as $order) {
                 $items = OrderItem::getOrderSortedByItems($order);
                 $quantityByModifications = OrderItem::getQuantityByModifications($items);
 
                 $orderService->setPrintCount($order->id);
-                $statusService->setPrintStatus($order->id);
+                $statusService->setPrintStatus($order);
 
                 $print_order .= view('admin.vinograd.order.components.print_order', [
                     'order' => $order,
@@ -105,14 +107,49 @@ class OrderPrintsController extends AppOrdersController
                 $print_order .= '<div class="border border-dark"></div>';
 
             }
+            return $print_order;
+
+        }, function ($print_order) {
             return [
                 'success' => [
                     'print_order' => $print_order
                 ]
             ];
-        } catch  (\RuntimeException $e) {
+        }, function (\Throwable $e) {
+            dd(['errors' => [$e->getMessage()]]);
             return ['errors' => [$e->getMessage()]];
-        }
+        });
+        dd('12', $a);
+
+
+
+
+//        try {
+//            $print_order = '';
+//            foreach ($orders as $order) {
+//                $items = OrderItem::getOrderSortedByItems($order);
+//                $quantityByModifications = OrderItem::getQuantityByModifications($items);
+//
+//                $orderService->setPrintCount($order->id);
+//                $statusService->setPrintStatus($order->id);
+//
+//                $print_order .= view('admin.vinograd.order.components.print_order', [
+//                    'order' => $order,
+//                    'items' => $items,
+//                    'quantityByModifications' => $quantityByModifications,
+//                    'currency' => Currency::where('code', $order->currency)->first()
+//                ])->render();
+//                $print_order .= '<div class="border border-dark"></div>';
+//
+//            }
+//            return [
+//                'success' => [
+//                    'print_order' => $print_order
+//                ]
+//            ];
+//        } catch  (\RuntimeException $e) {
+//            return ['errors' => [$e->getMessage()]];
+//        }
     }
 
     public function nalozhkaBlanck (NumberToStringService $service, $id)

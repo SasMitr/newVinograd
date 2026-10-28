@@ -36,13 +36,13 @@ class StatusService
 
     public function setPrintStatus($order_id)
     {
-        return DB::transaction(function () use ($order_id)
-        {
+//        return DB::transaction(function () use ($order_id)
+//        {
             $order = Order::find($order_id);
             if ($order->isNew() || $order->isPaid()) {
                 $this->setStatus($order->id, Status::FORMED);
             }
-        });
+//        });
     }
 
     public function isFormed ($order)
